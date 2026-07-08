@@ -10,9 +10,11 @@ import { SEO } from "@/components/ui/SEO";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { MapPlaceholder } from "@/components/contact/MapPlaceholder";
-import { architect } from "@/data/content";
+import { useSiteData } from "@/context/DataContext";
 
 export function Contact() {
+  const { architect } = useSiteData();
+
   return (
     <>
       <SEO

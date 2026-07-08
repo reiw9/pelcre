@@ -7,10 +7,12 @@ import { SEO } from "@/components/ui/SEO";
 import { ProjectCard } from "@/components/projects/ProjectCard";
 import { ScrollReveal, ScrollRevealGroup, ScrollRevealItem } from "@/components/ui/ScrollReveal";
 import { Testimonials } from "@/components/ui/Testimonials";
-import { architect, bio, testimonials } from "@/data/content";
-import { featuredProjects } from "@/data/projects";
+import { useSiteData } from "@/context/DataContext";
 
 export function Home() {
+  const { architect, bio, testimonials, projects } = useSiteData();
+  const featuredProjects = projects.filter((p) => p.featured);
+
   return (
     <>
       <SEO

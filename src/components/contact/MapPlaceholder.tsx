@@ -1,7 +1,8 @@
 import { MapPin } from "lucide-react";
-import { architect } from "@/data/content";
+import { useSiteData } from "@/context/DataContext";
 
 export function MapPlaceholder() {
+  const { architect } = useSiteData();
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
     architect.address,
   )}`;

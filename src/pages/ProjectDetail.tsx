@@ -6,11 +6,12 @@ import { ScrollReveal, ScrollRevealGroup, ScrollRevealItem } from "@/components/
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { MasonryGallery } from "@/components/projects/MasonryGallery";
 import { CTASection } from "@/components/ui/CTASection";
-import { getProjectBySlug, projects } from "@/data/projects";
+import { useSiteData } from "@/context/DataContext";
 
 export function ProjectDetail() {
   const { slug } = useParams<{ slug: string }>();
-  const project = slug ? getProjectBySlug(slug) : undefined;
+  const { projects } = useSiteData();
+  const project = slug ? projects.find((p) => p.slug === slug) : undefined;
 
   if (!project) return <Navigate to="/projects" replace />;
 
@@ -97,10 +98,12 @@ export function ProjectDetail() {
       </section>
 
       {/* Gallery */}
-      <section className="container-lux pb-28 sm:pb-36">
-        <SectionTitle eyebrow="Gallery" title="Photography" className="mb-14" />
-        <MasonryGallery images={project.gallery} title={project.title} />
-      </section>
+      {project.gallery.length > 0 && (
+        <section className="container-lux pb-28 sm:pb-36">
+          <SectionTitle eyebrow="Gallery" title="Photography" className="mb-14" />
+          <MasonryGallery images={project.gallery} title={project.title} />
+        </section>
+      )}
 
       {/* Challenge & Solution */}
       <section className="bg-linen py-28 sm:py-36 dark:bg-ink-soft">
@@ -125,42 +128,46 @@ export function ProjectDetail() {
       </section>
 
       {/* Floor plans */}
-      <section className="container-lux py-28 sm:py-36">
-        <SectionTitle eyebrow="Documentation" title="Floor Plans" className="mb-14" />
-        <ScrollRevealGroup className="grid gap-8 sm:grid-cols-2">
-          {project.floorPlans.map((src, i) => (
-            <ScrollRevealItem key={src + i}>
-              <div className="overflow-hidden rounded-lg border border-mist bg-linen dark:bg-ink-soft">
-                <img
-                  src={src}
-                  alt={`${project.title} floor plan ${i + 1}`}
-                  loading="lazy"
-                  className="w-full object-cover"
-                />
-              </div>
-            </ScrollRevealItem>
-          ))}
-        </ScrollRevealGroup>
-      </section>
+      {project.floorPlans.length > 0 && (
+        <section className="container-lux py-28 sm:py-36">
+          <SectionTitle eyebrow="Documentation" title="Floor Plans" className="mb-14" />
+          <ScrollRevealGroup className="grid gap-8 sm:grid-cols-2">
+            {project.floorPlans.map((src, i) => (
+              <ScrollRevealItem key={src + i}>
+                <div className="overflow-hidden rounded-lg border border-mist bg-linen dark:bg-ink-soft">
+                  <img
+                    src={src}
+                    alt={`${project.title} floor plan ${i + 1}`}
+                    loading="lazy"
+                    className="w-full object-cover"
+                  />
+                </div>
+              </ScrollRevealItem>
+            ))}
+          </ScrollRevealGroup>
+        </section>
+      )}
 
       {/* Renders */}
-      <section className="container-lux pb-28 sm:pb-36">
-        <SectionTitle eyebrow="Visualization" title="Renders" className="mb-14" />
-        <ScrollRevealGroup className="grid gap-8 sm:grid-cols-2">
-          {project.renders.map((src, i) => (
-            <ScrollRevealItem key={src + i}>
-              <div className="aspect-16/10 overflow-hidden rounded-lg border border-mist bg-linen dark:bg-ink-soft">
-                <img
-                  src={src}
-                  alt={`${project.title} render ${i + 1}`}
-                  loading="lazy"
-                  className="h-full w-full object-cover"
-                />
-              </div>
-            </ScrollRevealItem>
-          ))}
-        </ScrollRevealGroup>
-      </section>
+      {project.renders.length > 0 && (
+        <section className="container-lux pb-28 sm:pb-36">
+          <SectionTitle eyebrow="Visualization" title="Renders" className="mb-14" />
+          <ScrollRevealGroup className="grid gap-8 sm:grid-cols-2">
+            {project.renders.map((src, i) => (
+              <ScrollRevealItem key={src + i}>
+                <div className="aspect-16/10 overflow-hidden rounded-lg border border-mist bg-linen dark:bg-ink-soft">
+                  <img
+                    src={src}
+                    alt={`${project.title} render ${i + 1}`}
+                    loading="lazy"
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              </ScrollRevealItem>
+            ))}
+          </ScrollRevealGroup>
+        </section>
+      )}
 
       {/* Materials */}
       <section className="container-lux pb-28 sm:pb-36">

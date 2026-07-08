@@ -6,7 +6,7 @@ import {
   LinkedinIcon,
   XIcon,
 } from "@/components/ui/SocialIcons";
-import { architect } from "@/data/content";
+import { useSiteData } from "@/context/DataContext";
 
 const columns = [
   {
@@ -30,6 +30,7 @@ const columns = [
 ];
 
 export function Footer() {
+  const { architect } = useSiteData();
   const year = new Date().getFullYear();
 
   return (

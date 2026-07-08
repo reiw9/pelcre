@@ -5,10 +5,11 @@ import { PageHero } from "@/components/ui/PageHero";
 import { SEO } from "@/components/ui/SEO";
 import { ProjectCard } from "@/components/projects/ProjectCard";
 import { ProjectFilter } from "@/components/projects/ProjectFilter";
-import { projects, categories } from "@/data/projects";
-import type { ProjectCategory } from "@/data/types";
+import { useSiteData } from "@/context/DataContext";
+import { categories, type ProjectCategory } from "@/data/types";
 
 export function Projects() {
+  const { projects } = useSiteData();
   const [searchParams, setSearchParams] = useSearchParams();
   const categoryParam = searchParams.get("category") as ProjectCategory | null;
   const [active, setActive] = useState<ProjectCategory | "All">(

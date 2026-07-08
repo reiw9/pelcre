@@ -4,7 +4,7 @@ import { PageHero } from "@/components/ui/PageHero";
 import { SEO } from "@/components/ui/SEO";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { CTASection } from "@/components/ui/CTASection";
-import { services } from "@/data/content";
+import { useSiteData } from "@/context/DataContext";
 import { cn } from "@/lib/cn";
 
 const icons: Record<string, LucideIcon> = {
@@ -17,6 +17,8 @@ const icons: Record<string, LucideIcon> = {
 };
 
 export function Services() {
+  const { services } = useSiteData();
+
   return (
     <>
       <SEO

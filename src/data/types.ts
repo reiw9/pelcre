@@ -5,6 +5,14 @@ export type ProjectCategory =
   | "Landscape"
   | "Concept";
 
+export const categories: ProjectCategory[] = [
+  "Residential",
+  "Commercial",
+  "Interior",
+  "Landscape",
+  "Concept",
+];
+
 export interface ProjectMaterial {
   name: string;
   detail: string;
@@ -66,4 +74,45 @@ export interface Testimonial {
   name: string;
   role: string;
   quote: string;
+}
+
+export interface SocialLinks {
+  instagram: string;
+  linkedin: string;
+  behance: string;
+  x: string;
+}
+
+export interface Architect {
+  name: string;
+  studio: string;
+  title: string;
+  tagline: string;
+  location: string;
+  email: string;
+  phone: string;
+  address: string;
+  social: SocialLinks;
+}
+
+export interface Philosophy {
+  title: string;
+  text: string;
+}
+
+export interface Bio {
+  paragraphs: string[];
+  philosophy: Philosophy[];
+}
+
+export interface SiteData {
+  architect: Architect;
+  bio: Bio;
+  timeline: TimelineItem[];
+  skills: Skill[];
+  software: SoftwareItem[];
+  awards: Award[];
+  services: Service[];
+  testimonials: Testimonial[];
+  projects: Project[];
 }

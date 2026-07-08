@@ -7,9 +7,11 @@ import { SkillBars } from "@/components/ui/SkillBar";
 import { SoftwareGrid } from "@/components/ui/SoftwareGrid";
 import { AwardsList } from "@/components/ui/AwardsList";
 import { CTASection } from "@/components/ui/CTASection";
-import { architect, bio, timeline, skills, software, awards } from "@/data/content";
+import { useSiteData } from "@/context/DataContext";
 
 export function About() {
+  const { architect, bio, timeline, skills, software, awards } = useSiteData();
+
   return (
     <>
       <SEO

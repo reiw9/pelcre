@@ -5,7 +5,7 @@ import { Menu, Moon, Sun, X } from "lucide-react";
 import { useScrolled } from "@/hooks/useScrolled";
 import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
 import { useTheme } from "@/context/ThemeContext";
-import { architect } from "@/data/content";
+import { useSiteData } from "@/context/DataContext";
 import { cn } from "@/lib/cn";
 
 const links = [
@@ -21,6 +21,7 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const { pathname } = useLocation();
+  const { architect } = useSiteData();
 
   useLockBodyScroll(open);
 

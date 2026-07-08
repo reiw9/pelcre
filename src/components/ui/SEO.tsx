@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet-async";
-import { architect } from "@/data/content";
+import { useSiteData } from "@/context/DataContext";
 
 interface SEOProps {
   title: string;
@@ -8,6 +8,7 @@ interface SEOProps {
 }
 
 export function SEO({ title, description, image }: SEOProps) {
+  const { architect } = useSiteData();
   const fullTitle = `${title} — ${architect.name}`;
 
   return (
