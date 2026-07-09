@@ -32,7 +32,7 @@ export function About() {
           <div className="sticky top-32">
             <div className="relative aspect-3/4 overflow-hidden rounded-lg border border-mist">
               <img
-                src={architect.photo}
+                src={architect.founderPhoto}
                 alt={`Portrait of ${architect.name}`}
                 loading="lazy"
                 className="h-full w-full object-cover object-top grayscale"

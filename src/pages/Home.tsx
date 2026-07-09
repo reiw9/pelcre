@@ -123,7 +123,7 @@ export function Home() {
         <ScrollReveal>
           <div className="relative aspect-4/5 overflow-hidden rounded-lg border border-mist">
             <img
-              src={architect.photo}
+              src={architect.studioPhoto}
               alt={architect.name}
               loading="lazy"
               className="h-full w-full object-cover"
