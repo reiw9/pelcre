@@ -9,7 +9,7 @@ import { PageHero } from "@/components/ui/PageHero";
 import { SEO } from "@/components/ui/SEO";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { ContactForm } from "@/components/contact/ContactForm";
-import { MapPlaceholder } from "@/components/contact/MapPlaceholder";
+import { StudioMap } from "@/components/contact/StudioMap";
 import { useSiteData } from "@/context/DataContext";
 
 export function Contact() {
@@ -117,7 +117,7 @@ export function Contact() {
           </ScrollReveal>
 
           <ScrollReveal delay={0.15}>
-            <MapPlaceholder />
+            <StudioMap />
           </ScrollReveal>
         </div>
       </section>
