@@ -57,7 +57,7 @@ export function Home() {
             transition={{ duration: 1, delay: 0.75, ease: [0.22, 1, 0.36, 1] }}
             className="mt-7 max-w-lg text-base leading-relaxed text-mist sm:text-lg"
           >
-            {architect.tagline} A studio designing houses, interiors, and
+            {architect.tagline} designing houses, interiors, and
             landscapes that feel discovered rather than built.
           </motion.p>
           <motion.div
@@ -157,9 +157,9 @@ export function Home() {
 
       {/* Contact preview */}
       <CTASection
-        eyebrow="Let's build something quiet"
-        title="Have a site in mind?"
-        description="Tell us about your project — where it stands, what it needs to become, and when you'd like to begin."
+        eyebrow="Let's create some dream"
+        title="Have an idea to create?"
+        description="Contact me."
         buttonLabel="Get in Touch"
         buttonTo="/contact"
       />
