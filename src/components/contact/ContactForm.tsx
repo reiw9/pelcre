@@ -2,6 +2,9 @@ import { useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
 import { AlertCircle, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/cn";
+import { useSiteData } from "@/context/DataContext";
+
+const WEB3FORMS_ACCESS_KEY = "21578932-1196-4f93-b18a-aef8f60f55bd";
 
 interface FormState {
   name: string;
@@ -43,10 +46,12 @@ function validate(values: FormState) {
 }
 
 export function ContactForm() {
+  const { architect } = useSiteData();
   const [values, setValues] = useState<FormState>(initialState);
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
 
   const handleChange = (
     field: keyof FormState,
@@ -56,17 +61,43 @@ export function ContactForm() {
     if (errors[field]) setErrors((prev) => ({ ...prev, [field]: undefined }));
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const validationErrors = validate(values);
     setErrors(validationErrors);
     if (Object.keys(validationErrors).length > 0) return;
 
     setSubmitting(true);
-    window.setTimeout(() => {
+    setSubmitError(false);
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_ACCESS_KEY,
+          subject: `New project inquiry from ${values.name}`,
+          name: values.name,
+          email: values.email,
+          phone: values.phone,
+          project_type: values.projectType,
+          message: values.message,
+        }),
+      });
+      const result = await response.json();
+      if (result.success) {
+        setSubmitted(true);
+      } else {
+        setSubmitError(true);
+      }
+    } catch {
+      setSubmitError(true);
+    } finally {
       setSubmitting(false);
-      setSubmitted(true);
-    }, 900);
+    }
   };
 
   if (submitted) {
@@ -157,6 +188,18 @@ export function ContactForm() {
           aria-invalid={!!errors.message}
         />
       </Field>
+
+      {submitError && (
+        <p className="flex items-start gap-2 text-sm text-ink dark:text-bone">
+          <AlertCircle size={16} className="mt-0.5 shrink-0" />
+          Something went wrong sending your message. Please try again, or
+          reach us directly at{" "}
+          <a href={`mailto:${architect.email}`} className="link-underline font-medium">
+            {architect.email}
+          </a>{" "}
+          or {architect.phone}.
+        </p>
+      )}
 
       <button
         type="submit"
