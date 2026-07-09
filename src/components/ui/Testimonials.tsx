@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import type { Testimonial } from "@/data/types";
 
 export function Testimonials({ items }: { items: Testimonial[] }) {
+  const { t } = useTranslation();
   const [index, setIndex] = useState(0);
   const active = items[index];
 
@@ -34,17 +36,17 @@ export function Testimonials({ items }: { items: Testimonial[] }) {
       </div>
       <div className="mt-10 flex items-center justify-center gap-6">
         <button
-          aria-label="Previous testimonial"
+          aria-label={t("testimonials.previous")}
           onClick={() => go(-1)}
           className="flex h-10 w-10 items-center justify-center rounded-full border border-mist transition-colors hover:border-gold hover:text-gold"
         >
-          <ChevronLeft size={16} />
+          <ChevronLeft size={16} className="rtl:rotate-180" />
         </button>
         <div className="flex gap-2">
-          {items.map((t, i) => (
+          {items.map((item, i) => (
             <button
-              key={t.name}
-              aria-label={`Go to testimonial ${i + 1}`}
+              key={item.name}
+              aria-label={t("testimonials.goTo", { index: i + 1 })}
               onClick={() => setIndex(i)}
               className={`h-1.5 rounded-full transition-all ${
                 i === index ? "w-6 bg-gold" : "w-1.5 bg-mist"
@@ -53,11 +55,11 @@ export function Testimonials({ items }: { items: Testimonial[] }) {
           ))}
         </div>
         <button
-          aria-label="Next testimonial"
+          aria-label={t("testimonials.next")}
           onClick={() => go(1)}
           className="flex h-10 w-10 items-center justify-center rounded-full border border-mist transition-colors hover:border-gold hover:text-gold"
         >
-          <ChevronRight size={16} />
+          <ChevronRight size={16} className="rtl:rotate-180" />
         </button>
       </div>
     </div>

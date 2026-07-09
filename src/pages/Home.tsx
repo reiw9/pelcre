@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/Button";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { CTASection } from "@/components/ui/CTASection";
@@ -10,14 +11,15 @@ import { Testimonials } from "@/components/ui/Testimonials";
 import { useSiteData } from "@/context/DataContext";
 
 export function Home() {
+  const { t } = useTranslation();
   const { architect, bio, testimonials, projects } = useSiteData();
   const featuredProjects = projects.filter((p) => p.featured);
 
   return (
     <>
       <SEO
-        title="Architecture & Interiors"
-        description="Pelmot Creativity is a studio designing quiet, material-honest residential, commercial, and landscape architecture worldwide."
+        title={t("home.seoTitle")}
+        description={t("home.seoDescription")}
         image="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80"
       />
 
@@ -41,7 +43,7 @@ export function Home() {
             transition={{ duration: 0.9, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
             className="mb-6 inline-block rounded-full bg-[#9FA3AD] px-4 py-1.5 text-xs font-medium tracking-[0.35em] text-ink uppercase"
           >
-            Abdurrazzak Jazmati — Est. 2023
+            {t("home.heroBadge")}
           </motion.p>
           <motion.h1
             initial={{ opacity: 0, y: 32 }}
@@ -57,8 +59,7 @@ export function Home() {
             transition={{ duration: 1, delay: 0.75, ease: [0.22, 1, 0.36, 1] }}
             className="mt-7 max-w-lg text-base leading-relaxed text-mist sm:text-lg"
           >
-            {architect.tagline} designing houses, interiors, and
-            landscapes that feel discovered rather than built.
+            {architect.tagline} {t("home.heroTaglineSuffix")}
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -67,7 +68,7 @@ export function Home() {
             className="mt-11"
           >
             <Button to="/projects" className="!bg-bone !text-ink hover:!bg-gold-soft">
-              View Projects
+              {t("home.viewProjects")}
             </Button>
           </motion.div>
         </div>
@@ -76,7 +77,7 @@ export function Home() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.6, duration: 1 }}
-          className="absolute right-8 bottom-8 hidden text-mist sm:block"
+          className="absolute end-8 bottom-8 hidden text-mist sm:block"
         >
           <ChevronDown className="animate-bounce" size={22} strokeWidth={1.25} />
         </motion.div>
@@ -86,7 +87,7 @@ export function Home() {
       <section className="container-lux py-28 sm:py-36">
         <ScrollReveal className="mx-auto max-w-3xl text-center">
           <p className="font-serif text-3xl leading-snug text-balance text-ink sm:text-4xl dark:text-bone">
-            "Architecture begins, where engineering ends."
+            "{t("home.quote")}"
           </p>
           <p className="mt-6 text-sm font-medium tracking-[0.2em] text-stone uppercase">
             {architect.name}, {architect.title}
@@ -98,13 +99,13 @@ export function Home() {
       <section className="container-lux pb-28 sm:pb-36">
         <div className="mb-16 flex flex-wrap items-end justify-between gap-8">
           <SectionTitle
-            eyebrow="Selected Work"
-            title="Featured Projects"
-            description="A cross-section of recent residential, commercial, and public landscape commissions."
+            eyebrow={t("home.selectedWork")}
+            title={t("home.featuredProjectsTitle")}
+            description={t("home.featuredProjectsDescription")}
           />
           <ScrollReveal delay={0.15}>
             <Button to="/projects" variant="outline" className="text-ink dark:text-bone">
-              All Projects
+              {t("home.allProjects")}
             </Button>
           </ScrollReveal>
         </div>
@@ -132,17 +133,17 @@ export function Home() {
         </ScrollReveal>
         <ScrollReveal delay={0.1} className="flex flex-col justify-center">
           <p className="mb-4 text-xs font-medium tracking-[0.3em] text-stone uppercase">
-            The Studio
+            {t("home.theStudio")}
           </p>
           <h2 className="font-serif text-4xl leading-[1.1] font-medium text-balance text-ink sm:text-5xl dark:text-bone">
-            Fourteen years of quiet, deliberate architecture.
+            {t("home.studioHeading")}
           </h2>
           <p className="mt-6 max-w-md leading-relaxed text-stone">
             {bio.paragraphs[0]}
           </p>
           <div className="mt-9">
             <Button to="/about" variant="outline" className="text-ink dark:text-bone">
-              About the Studio
+              {t("home.aboutTheStudio")}
             </Button>
           </div>
         </ScrollReveal>
@@ -157,10 +158,10 @@ export function Home() {
 
       {/* Contact preview */}
       <CTASection
-        eyebrow="Let's create some dream"
-        title="Have an idea to create?"
-        description="Contact me."
-        buttonLabel="Get in Touch"
+        eyebrow={t("home.ctaEyebrow")}
+        title={t("home.ctaTitle")}
+        description={t("home.ctaDescription")}
+        buttonLabel={t("home.getInTouch")}
         buttonTo="/contact"
       />
     </>

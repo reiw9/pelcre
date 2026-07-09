@@ -1,6 +1,7 @@
 import { useParams, Link, Navigate } from "react-router-dom";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { SEO } from "@/components/ui/SEO";
 import { ScrollReveal, ScrollRevealGroup, ScrollRevealItem } from "@/components/ui/ScrollReveal";
 import { SectionTitle } from "@/components/ui/SectionTitle";
@@ -9,6 +10,7 @@ import { CTASection } from "@/components/ui/CTASection";
 import { useSiteData } from "@/context/DataContext";
 
 export function ProjectDetail() {
+  const { t } = useTranslation();
   const { slug } = useParams<{ slug: string }>();
   const { projects } = useSiteData();
   const project = slug ? projects.find((p) => p.slug === slug) : undefined;
@@ -19,12 +21,12 @@ export function ProjectDetail() {
   const nextProject = projects[(currentIndex + 1) % projects.length];
 
   const facts = [
-    { label: "Location", value: project.location },
-    { label: "Year", value: String(project.year) },
-    { label: "Area", value: project.area },
-    { label: "Client", value: project.client },
-    { label: "Category", value: project.category },
-    { label: "Status", value: project.status },
+    { label: t("projectDetail.location"), value: project.location },
+    { label: t("projectDetail.year"), value: String(project.year) },
+    { label: t("projectDetail.area"), value: project.area },
+    { label: t("projectDetail.client"), value: project.client },
+    { label: t("projectDetail.category"), value: t(`categories.${project.category}`) },
+    { label: t("projectDetail.status"), value: t(`status.${project.status}`) },
   ];
 
   return (
@@ -53,10 +55,10 @@ export function ProjectDetail() {
             to="/projects"
             className="mb-8 inline-flex items-center gap-2 text-xs font-medium tracking-[0.2em] text-mist uppercase transition-colors hover:text-bone"
           >
-            <ArrowLeft size={14} /> All Projects
+            <ArrowLeft size={14} className="rtl:rotate-180" /> {t("projectDetail.allProjects")}
           </Link>
           <p className="mb-5 text-xs font-medium tracking-[0.3em] text-gold-soft uppercase">
-            {project.category} — {project.location}
+            {t(`categories.${project.category}`)} — {project.location}
           </p>
           <h1 className="max-w-3xl font-serif text-5xl leading-[1.05] font-medium text-balance text-bone sm:text-6xl lg:text-7xl">
             {project.title}
@@ -84,7 +86,7 @@ export function ProjectDetail() {
         <div>
           <ScrollReveal>
             <p className="mb-4 text-xs font-medium tracking-[0.3em] text-stone uppercase">
-              Overview
+              {t("projectDetail.overview")}
             </p>
           </ScrollReveal>
           <div className="space-y-6">
@@ -100,7 +102,7 @@ export function ProjectDetail() {
       {/* Gallery */}
       {project.gallery.length > 0 && (
         <section className="container-lux pb-28 sm:pb-36">
-          <SectionTitle eyebrow="Gallery" title="Photography" className="mb-14" />
+          <SectionTitle eyebrow={t("projectDetail.gallery")} title={t("projectDetail.photography")} className="mb-14" />
           <MasonryGallery images={project.gallery} title={project.title} />
         </section>
       )}
@@ -110,7 +112,7 @@ export function ProjectDetail() {
         <div className="container-lux grid gap-12 sm:grid-cols-2 sm:gap-16">
           <ScrollReveal>
             <p className="mb-4 text-xs font-medium tracking-[0.3em] text-gold uppercase">
-              The Challenge
+              {t("projectDetail.theChallenge")}
             </p>
             <p className="font-serif text-2xl leading-snug text-balance text-ink sm:text-3xl dark:text-bone">
               {project.challenge}
@@ -118,7 +120,7 @@ export function ProjectDetail() {
           </ScrollReveal>
           <ScrollReveal delay={0.1}>
             <p className="mb-4 text-xs font-medium tracking-[0.3em] text-gold uppercase">
-              The Solution
+              {t("projectDetail.theSolution")}
             </p>
             <p className="font-serif text-2xl leading-snug text-balance text-ink sm:text-3xl dark:text-bone">
               {project.solution}
@@ -130,14 +132,14 @@ export function ProjectDetail() {
       {/* Floor plans */}
       {project.floorPlans.length > 0 && (
         <section className="container-lux py-28 sm:py-36">
-          <SectionTitle eyebrow="Documentation" title="Floor Plans" className="mb-14" />
+          <SectionTitle eyebrow={t("projectDetail.documentation")} title={t("projectDetail.floorPlans")} className="mb-14" />
           <ScrollRevealGroup className="grid gap-8 sm:grid-cols-2">
             {project.floorPlans.map((src, i) => (
               <ScrollRevealItem key={src + i}>
                 <div className="overflow-hidden rounded-lg border border-mist bg-linen dark:bg-ink-soft">
                   <img
                     src={src}
-                    alt={`${project.title} floor plan ${i + 1}`}
+                    alt={t("projectDetail.floorPlanAlt", { title: project.title, index: i + 1 })}
                     loading="lazy"
                     className="w-full object-cover"
                   />
@@ -151,14 +153,14 @@ export function ProjectDetail() {
       {/* Renders */}
       {project.renders.length > 0 && (
         <section className="container-lux pb-28 sm:pb-36">
-          <SectionTitle eyebrow="Visualization" title="Renders" className="mb-14" />
+          <SectionTitle eyebrow={t("projectDetail.visualization")} title={t("projectDetail.renders")} className="mb-14" />
           <ScrollRevealGroup className="grid gap-8 sm:grid-cols-2">
             {project.renders.map((src, i) => (
               <ScrollRevealItem key={src + i}>
                 <div className="aspect-16/10 overflow-hidden rounded-lg border border-mist bg-linen dark:bg-ink-soft">
                   <img
                     src={src}
-                    alt={`${project.title} render ${i + 1}`}
+                    alt={t("projectDetail.renderAlt", { title: project.title, index: i + 1 })}
                     loading="lazy"
                     className="h-full w-full object-cover"
                   />
@@ -171,7 +173,7 @@ export function ProjectDetail() {
 
       {/* Materials */}
       <section className="container-lux pb-28 sm:pb-36">
-        <SectionTitle eyebrow="Specification" title="Materials" className="mb-14" />
+        <SectionTitle eyebrow={t("projectDetail.specification")} title={t("projectDetail.materials")} className="mb-14" />
         <div className="divide-y divide-mist border-t border-b border-mist">
           {project.materials.map((material, i) => (
             <ScrollReveal key={material.name} delay={i * 0.04}>
@@ -179,7 +181,7 @@ export function ProjectDetail() {
                 <p className="font-serif text-xl text-ink dark:text-bone">
                   {material.name}
                 </p>
-                <p className="text-sm text-stone sm:text-right">
+                <p className="text-sm text-stone sm:text-end">
                   {material.detail}
                 </p>
               </div>
@@ -202,21 +204,21 @@ export function ProjectDetail() {
         <div className="absolute inset-0 bg-ink/40" />
         <div className="container-lux relative z-10 flex h-full flex-col items-center justify-center text-center">
           <p className="mb-4 text-xs font-medium tracking-[0.3em] text-gold-soft uppercase">
-            Next Project
+            {t("projectDetail.nextProject")}
           </p>
           <h2 className="font-serif text-4xl text-bone sm:text-6xl">
             {nextProject.title}
           </h2>
-          <span className="mt-6 flex h-12 w-12 items-center justify-center rounded-full border border-mist text-bone transition-transform duration-500 group-hover:translate-x-2">
+          <span className="mt-6 flex h-12 w-12 items-center justify-center rounded-full border border-mist text-bone transition-transform duration-500 group-hover:translate-x-2 rtl:rotate-180">
             <ArrowRight size={18} />
           </span>
         </div>
       </Link>
 
       <CTASection
-        title="Imagining something similar?"
-        description="Every commission begins with a conversation about your site and how you want to live within it."
-        buttonLabel="Start a Conversation"
+        title={t("projectDetail.ctaTitle")}
+        description={t("projectDetail.ctaDescription")}
+        buttonLabel={t("projectDetail.startAConversation")}
         buttonTo="/contact"
       />
     </>

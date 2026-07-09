@@ -1,4 +1,5 @@
 import { Mail, MapPin, Phone } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
   BehanceIcon,
   InstagramIcon,
@@ -13,19 +14,20 @@ import { StudioMap } from "@/components/contact/StudioMap";
 import { useSiteData } from "@/context/DataContext";
 
 export function Contact() {
+  const { t } = useTranslation();
   const { architect } = useSiteData();
 
   return (
     <>
       <SEO
-        title="Contact"
-        description="Get in touch with Pelmot Creativity to discuss your next architecture, interior, or landscape project."
+        title={t("contact.seoTitle")}
+        description={t("contact.seoDescription")}
       />
 
       <PageHero
-        eyebrow="Get in Touch"
-        title="Let's start a conversation"
-        description="Tell us about your site, your timeline, and the life you want the space to hold. We reply to every inquiry within two business days."
+        eyebrow={t("contact.getInTouch")}
+        title={t("contact.letsStart")}
+        description={t("contact.description")}
         image="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2400&q=80"
         short
       />
@@ -38,7 +40,7 @@ export function Contact() {
         <div className="space-y-10">
           <ScrollReveal delay={0.05}>
             <p className="mb-6 text-xs font-medium tracking-[0.2em] text-stone uppercase">
-              Contact Details
+              {t("contact.contactDetails")}
             </p>
             <ul className="space-y-5">
               <li>
@@ -74,14 +76,14 @@ export function Contact() {
 
           <ScrollReveal delay={0.1}>
             <p className="mb-4 text-xs font-medium tracking-[0.2em] text-stone uppercase">
-              Follow the Studio
+              {t("contact.followTheStudio")}
             </p>
             <div className="flex gap-3">
               <a
                 href={architect.social.instagram}
                 target="_blank"
                 rel="noreferrer"
-                aria-label="Instagram"
+                aria-label={t("common.instagram")}
                 className="flex h-10 w-10 items-center justify-center rounded-full border border-mist transition-colors hover:border-gold hover:text-gold"
               >
                 <InstagramIcon size={16} />
@@ -90,7 +92,7 @@ export function Contact() {
                 href={architect.social.linkedin}
                 target="_blank"
                 rel="noreferrer"
-                aria-label="LinkedIn"
+                aria-label={t("common.linkedin")}
                 className="flex h-10 w-10 items-center justify-center rounded-full border border-mist transition-colors hover:border-gold hover:text-gold"
               >
                 <LinkedinIcon size={16} />
@@ -99,7 +101,7 @@ export function Contact() {
                 href={architect.social.behance}
                 target="_blank"
                 rel="noreferrer"
-                aria-label="Behance"
+                aria-label={t("common.behance")}
                 className="flex h-10 w-10 items-center justify-center rounded-full border border-mist transition-colors hover:border-gold hover:text-gold"
               >
                 <BehanceIcon size={16} />
@@ -108,7 +110,7 @@ export function Contact() {
                 href={architect.social.x}
                 target="_blank"
                 rel="noreferrer"
-                aria-label="X (Twitter)"
+                aria-label={t("common.x")}
                 className="flex h-10 w-10 items-center justify-center rounded-full border border-mist transition-colors hover:border-gold hover:text-gold"
               >
                 <XIcon size={16} />

@@ -2,26 +2,29 @@ import { useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, Moon, Sun, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useScrolled } from "@/hooks/useScrolled";
 import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
 import { useTheme } from "@/context/ThemeContext";
 import { useSiteData } from "@/context/DataContext";
 import { cn } from "@/lib/cn";
-
-const links = [
-  { to: "/", label: "Home" },
-  { to: "/about", label: "About" },
-  { to: "/projects", label: "Projects" },
-  { to: "/services", label: "Services" },
-  { to: "/contact", label: "Contact" },
-];
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 export function Navbar() {
+  const { t } = useTranslation();
   const scrolled = useScrolled(40);
   const [open, setOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const { pathname } = useLocation();
   const { architect } = useSiteData();
+
+  const links = [
+    { to: "/", label: t("nav.home") },
+    { to: "/about", label: t("nav.about") },
+    { to: "/projects", label: t("nav.projects") },
+    { to: "/services", label: t("nav.services") },
+    { to: "/contact", label: t("nav.contact") },
+  ];
 
   useLockBodyScroll(open);
 
@@ -65,8 +68,9 @@ export function Navbar() {
               {link.label}
             </NavLink>
           ))}
+          <LanguageSwitcher solid={solid} />
           <button
-            aria-label="Toggle dark mode"
+            aria-label={t("nav.toggleDarkMode")}
             onClick={toggleTheme}
             className={cn(
               "flex h-9 w-9 items-center justify-center rounded-full border transition-colors",
@@ -80,8 +84,9 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-4 lg:hidden">
+          <LanguageSwitcher solid={solid} />
           <button
-            aria-label="Toggle dark mode"
+            aria-label={t("nav.toggleDarkMode")}
             onClick={toggleTheme}
             className={cn(
               "flex h-9 w-9 items-center justify-center rounded-full border",
@@ -93,7 +98,7 @@ export function Navbar() {
             {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
           </button>
           <button
-            aria-label="Toggle menu"
+            aria-label={t("nav.toggleMenu")}
             onClick={() => setOpen((v) => !v)}
             className={cn(
               "flex h-9 w-9 items-center justify-center",

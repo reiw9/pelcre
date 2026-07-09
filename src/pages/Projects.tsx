@@ -1,6 +1,7 @@
 import { useMemo, useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { PageHero } from "@/components/ui/PageHero";
 import { SEO } from "@/components/ui/SEO";
 import { ProjectCard } from "@/components/projects/ProjectCard";
@@ -9,6 +10,7 @@ import { useSiteData } from "@/context/DataContext";
 import { categories, type ProjectCategory } from "@/data/types";
 
 export function Projects() {
+  const { t } = useTranslation();
   const { projects } = useSiteData();
   const [searchParams, setSearchParams] = useSearchParams();
   const categoryParam = searchParams.get("category") as ProjectCategory | null;
@@ -48,14 +50,14 @@ export function Projects() {
   return (
     <>
       <SEO
-        title="Projects"
-        description="Browse residential, commercial, interior, landscape, and concept architecture projects by Pelmot Creativity."
+        title={t("projects.seoTitle")}
+        description={t("projects.seoDescription")}
       />
 
       <PageHero
-        eyebrow="Portfolio"
-        title="Selected Projects"
-        description="A collection of residential, commercial, interior, landscape, and concept work spanning four continents."
+        eyebrow={t("projects.portfolio")}
+        title={t("projects.selectedProjects")}
+        description={t("projects.description")}
         image="https://images.unsplash.com/photo-1449844908441-8829872d2607?auto=format&fit=crop&w=2400&q=80"
         short
       />
@@ -67,6 +69,9 @@ export function Projects() {
             active={active}
             onChange={handleChange}
             counts={counts}
+            filterLabel={t("projects.filterLabel")}
+            allLabel={t("categories.all")}
+            categoryLabel={(c) => t(`categories.${c}`)}
           />
         </div>
 
@@ -80,7 +85,7 @@ export function Projects() {
 
         {filtered.length === 0 && (
           <p className="py-20 text-center text-stone">
-            No projects found in this category yet.
+            {t("projects.noProjectsFound")}
           </p>
         )}
       </section>

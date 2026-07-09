@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ImageLightbox } from "@/components/ui/ImageLightbox";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
 export function MasonryGallery({ images, title = "Gallery" }: { images: string[]; title?: string }) {
+  const { t } = useTranslation();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   return (
@@ -13,11 +15,11 @@ export function MasonryGallery({ images, title = "Gallery" }: { images: string[]
             <button
               onClick={() => setActiveIndex(i)}
               className="block w-full overflow-hidden rounded-lg border border-mist bg-charcoal/10"
-              aria-label={`Open ${title} image ${i + 1}`}
+              aria-label={t("gallery.openImage", { title, index: i + 1 })}
             >
               <img
                 src={src}
-                alt={`${title} ${i + 1}`}
+                alt={t("gallery.imageAlt", { title, index: i + 1 })}
                 loading="lazy"
                 className="w-full object-cover transition-transform duration-700 hover:scale-105"
               />

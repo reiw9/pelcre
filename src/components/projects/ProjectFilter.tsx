@@ -6,6 +6,9 @@ interface ProjectFilterProps {
   active: ProjectCategory | "All";
   onChange: (category: ProjectCategory | "All") => void;
   counts: Record<string, number>;
+  filterLabel: string;
+  allLabel: string;
+  categoryLabel: (category: ProjectCategory) => string;
 }
 
 export function ProjectFilter({
@@ -13,11 +16,14 @@ export function ProjectFilter({
   active,
   onChange,
   counts,
+  filterLabel,
+  allLabel,
+  categoryLabel,
 }: ProjectFilterProps) {
   const options: (ProjectCategory | "All")[] = ["All", ...categories];
 
   return (
-    <div className="flex flex-wrap gap-3" role="tablist" aria-label="Filter projects by category">
+    <div className="flex flex-wrap gap-3" role="tablist" aria-label={filterLabel}>
       {options.map((option) => {
         const isActive = active === option;
         return (
@@ -33,8 +39,8 @@ export function ProjectFilter({
                 : "border-mist text-stone hover:border-ink hover:text-ink dark:hover:text-bone",
             )}
           >
-            {option}
-            <span className="ml-1.5 opacity-60">({counts[option] ?? 0})</span>
+            {option === "All" ? allLabel : categoryLabel(option)}
+            <span className="ms-1.5 opacity-60">({counts[option] ?? 0})</span>
           </button>
         );
       })}

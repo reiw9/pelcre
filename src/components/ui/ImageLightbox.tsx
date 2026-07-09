@@ -1,6 +1,7 @@
 import { useEffect, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
 
 interface ImageLightboxProps {
@@ -16,6 +17,7 @@ export function ImageLightbox({
   onClose,
   onChange,
 }: ImageLightboxProps) {
+  const { t } = useTranslation();
   const isOpen = index !== null;
   useLockBodyScroll(isOpen);
 
@@ -52,22 +54,22 @@ export function ImageLightbox({
           onClick={onClose}
         >
           <button
-            aria-label="Close lightbox"
+            aria-label={t("lightbox.close")}
             onClick={onClose}
-            className="absolute top-6 right-6 flex h-11 w-11 items-center justify-center rounded-full text-mist transition-colors hover:text-bone"
+            className="absolute top-6 end-6 flex h-11 w-11 items-center justify-center rounded-full text-mist transition-colors hover:text-bone"
           >
             <X size={24} />
           </button>
 
           <button
-            aria-label="Previous image"
+            aria-label={t("lightbox.previous")}
             onClick={(e) => {
               e.stopPropagation();
               go(-1);
             }}
-            className="absolute left-3 flex h-12 w-12 items-center justify-center rounded-full text-mist transition-colors hover:text-bone sm:left-8"
+            className="absolute start-3 flex h-12 w-12 items-center justify-center rounded-full text-mist transition-colors hover:text-bone sm:start-8"
           >
-            <ChevronLeft size={28} />
+            <ChevronLeft size={28} className="rtl:rotate-180" />
           </button>
 
           <motion.img
@@ -82,14 +84,14 @@ export function ImageLightbox({
           />
 
           <button
-            aria-label="Next image"
+            aria-label={t("lightbox.next")}
             onClick={(e) => {
               e.stopPropagation();
               go(1);
             }}
-            className="absolute right-3 flex h-12 w-12 items-center justify-center rounded-full text-mist transition-colors hover:text-bone sm:right-8"
+            className="absolute end-3 flex h-12 w-12 items-center justify-center rounded-full text-mist transition-colors hover:text-bone sm:end-8"
           >
-            <ChevronRight size={28} />
+            <ChevronRight size={28} className="rtl:rotate-180" />
           </button>
 
           <p className="absolute bottom-6 text-xs tracking-[0.2em] text-mist uppercase">

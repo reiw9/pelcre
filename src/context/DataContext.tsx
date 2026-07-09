@@ -2,11 +2,14 @@ import {
   createContext,
   useContext,
   useEffect,
+  useMemo,
   useState,
   type ReactNode,
 } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { sanityClient, imageUrl, splitParagraphs } from "@/lib/sanity";
+import { useLanguage } from "@/context/LanguageContext";
+import type { SupportedLanguage } from "@/i18n";
 import type { Project, SiteData } from "@/data/types";
 
 const PROJECTS_QUERY = `*[_type == "project"] | order(year desc){
@@ -33,7 +36,14 @@ const PROJECTS_QUERY = `*[_type == "project"] | order(year desc){
 const SETTINGS_QUERY = `*[_type == "siteSettings"][0]`;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function mapProject(doc: any): Project {
+function pickLocale(field: any, lang: SupportedLanguage): string {
+  if (!field) return "";
+  if (typeof field === "string") return field;
+  return field[lang] ?? field.en ?? "";
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function mapProject(doc: any, lang: SupportedLanguage): Project {
   return {
     slug: doc.slug,
     title: doc.title,
@@ -46,17 +56,86 @@ function mapProject(doc: any): Project {
     featured: !!doc.featured,
     cover: imageUrl(doc.coverImage, 1600),
     heroImage: imageUrl(doc.coverImage, 2400),
-    excerpt: doc.excerpt ?? "",
-    description: splitParagraphs(doc.description),
-    challenge: doc.challenge ?? "",
-    solution: doc.solution ?? "",
+    excerpt: pickLocale(doc.excerpt, lang),
+    description: splitParagraphs(pickLocale(doc.description, lang)),
+    challenge: pickLocale(doc.challenge, lang),
+    solution: pickLocale(doc.solution, lang),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     gallery: (doc.gallery ?? []).map((img: any) => imageUrl(img, 1600)),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     floorPlans: (doc.floorPlans ?? []).map((img: any) => imageUrl(img, 1800)),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     renders: (doc.renders ?? []).map((img: any) => imageUrl(img, 1600)),
-    materials: doc.materials ?? [],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    materials: (doc.materials ?? []).map((m: any) => ({
+      name: pickLocale(m.name, lang),
+      detail: pickLocale(m.detail, lang),
+    })),
+  };
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function buildSiteData(rawProjects: any[], settings: any, lang: SupportedLanguage): SiteData {
+  return {
+    architect: {
+      name: settings.name,
+      studio: settings.name,
+      title: pickLocale(settings.title, lang),
+      tagline: pickLocale(settings.tagline, lang),
+      location: settings.location,
+      founderPhoto: imageUrl(settings.founderPhoto, 1400),
+      studioPhoto: imageUrl(settings.studioPhoto, 1400),
+      email: settings.email,
+      phone: settings.phone,
+      address: settings.address,
+      social: settings.social ?? { instagram: "", linkedin: "", behance: "", x: "" },
+    },
+    bio: {
+      paragraphs: splitParagraphs(pickLocale(settings.bioParagraphs, lang)),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      philosophy: (settings.philosophy ?? []).map((item: any) => ({
+        title: pickLocale(item.title, lang),
+        text: pickLocale(item.text, lang),
+      })),
+    },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    timeline: (settings.timeline ?? []).map((item: any) => ({
+      year: item.year,
+      title: pickLocale(item.title, lang),
+      place: item.place,
+      description: pickLocale(item.description, lang),
+    })),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    skills: (settings.skills ?? []).map((item: any) => ({
+      name: pickLocale(item.name, lang),
+      level: item.level,
+    })),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    software: (settings.software ?? []).map((item: any) => ({
+      name: item.name,
+      category: pickLocale(item.category, lang),
+    })),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    awards: (settings.awards ?? []).map((item: any) => ({
+      year: item.year,
+      title: pickLocale(item.title, lang),
+      organization: item.organization,
+    })),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    services: (settings.services ?? []).map((item: any) => ({
+      icon: item.icon,
+      title: pickLocale(item.title, lang),
+      description: pickLocale(item.description, lang),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      points: (item.points ?? []).map((p: any) => pickLocale(p, lang)),
+    })),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    testimonials: (settings.testimonials ?? []).map((item: any) => ({
+      name: item.name,
+      role: pickLocale(item.role, lang),
+      quote: pickLocale(item.quote, lang),
+    })),
+    projects: rawProjects.map((doc) => mapProject(doc, lang)),
   };
 }
 
@@ -93,8 +172,16 @@ function ErrorScreen({ message }: { message: string }) {
   );
 }
 
+interface RawData {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  rawProjects: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  settings: any;
+}
+
 export function DataProvider({ children }: { children: ReactNode }) {
-  const [data, setData] = useState<SiteData | null>(null);
+  const { language } = useLanguage();
+  const [raw, setRaw] = useState<RawData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -110,32 +197,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         setError("Site settings haven't been published in Sanity yet.");
         return;
       }
-      setData({
-        architect: {
-          name: settings.name,
-          studio: settings.name,
-          title: settings.title,
-          tagline: settings.tagline,
-          location: settings.location,
-          founderPhoto: imageUrl(settings.founderPhoto, 1400),
-          studioPhoto: imageUrl(settings.studioPhoto, 1400),
-          email: settings.email,
-          phone: settings.phone,
-          address: settings.address,
-          social: settings.social ?? { instagram: "", linkedin: "", behance: "", x: "" },
-        },
-        bio: {
-          paragraphs: splitParagraphs(settings.bioParagraphs),
-          philosophy: settings.philosophy ?? [],
-        },
-        timeline: settings.timeline ?? [],
-        skills: settings.skills ?? [],
-        software: settings.software ?? [],
-        awards: settings.awards ?? [],
-        services: settings.services ?? [],
-        testimonials: settings.testimonials ?? [],
-        projects: rawProjects.map(mapProject),
-      });
+      setRaw({ rawProjects, settings });
     }).catch((err) => {
       if (!cancelled) setError(err instanceof Error ? err.message : String(err));
     });
@@ -144,6 +206,11 @@ export function DataProvider({ children }: { children: ReactNode }) {
       cancelled = true;
     };
   }, []);
+
+  const data = useMemo(
+    () => (raw ? buildSiteData(raw.rawProjects, raw.settings, language) : null),
+    [raw, language],
+  );
 
   if (error) return <ErrorScreen message={error} />;
   if (!data) return <LoadingScreen />;

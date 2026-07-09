@@ -15,7 +15,7 @@ export function AwardsList({ awards }: { awards: Award[] }) {
                 {award.title}
               </p>
             </div>
-            <p className="pl-20 text-sm text-stone sm:pl-0">
+            <p className="ps-20 text-sm text-stone sm:ps-0">
               {award.organization}
             </p>
           </div>

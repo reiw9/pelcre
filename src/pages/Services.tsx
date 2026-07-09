@@ -1,5 +1,6 @@
 import { Box, Compass, Hammer, MessageCircle, Sofa, Trees, Check } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { PageHero } from "@/components/ui/PageHero";
 import { SEO } from "@/components/ui/SEO";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
@@ -17,19 +18,20 @@ const icons: Record<string, LucideIcon> = {
 };
 
 export function Services() {
+  const { t } = useTranslation();
   const { services } = useSiteData();
 
   return (
     <>
       <SEO
-        title="Services"
-        description="Architectural design, interior design, landscape design, renovation, visualization, and consultation services from Pelmot Creativity."
+        title={t("services.seoTitle")}
+        description={t("services.seoDescription")}
       />
 
       <PageHero
-        eyebrow="What We Do"
-        title="Services"
-        description="From first sketch to final finish, Pelmot Creativity offers a full range of architectural and design services tailored to the scale of your project."
+        eyebrow={t("services.whatWeDo")}
+        title={t("services.title")}
+        description={t("services.description")}
         image="https://images.unsplash.com/photo-1571939228382-b2f2b585ce15?auto=format&fit=crop&w=2400&q=80"
         short
       />
@@ -81,9 +83,9 @@ export function Services() {
       </section>
 
       <CTASection
-        title="Not sure where to start?"
-        description="Book an introductory consultation and we'll help you scope the right service for your project."
-        buttonLabel="Book a Consultation"
+        title={t("services.ctaTitle")}
+        description={t("services.ctaDescription")}
+        buttonLabel={t("services.bookConsultation")}
         buttonTo="/contact"
       />
     </>

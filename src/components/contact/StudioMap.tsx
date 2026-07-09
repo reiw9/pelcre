@@ -1,6 +1,8 @@
+import { useTranslation } from "react-i18next";
 import { useSiteData } from "@/context/DataContext";
 
 export function StudioMap() {
+  const { t } = useTranslation();
   const { architect } = useSiteData();
   const embedSrc = `https://www.google.com/maps/embed?pb=!1m3!2m1!1s${encodeURIComponent(
     architect.address,
@@ -10,7 +12,7 @@ export function StudioMap() {
     <div className="relative h-full min-h-[320px] w-full overflow-hidden rounded-lg border border-mist">
       <iframe
         src={embedSrc}
-        title="Studio location map"
+        title={t("common.studioLocationMap")}
         loading="lazy"
         referrerPolicy="no-referrer-when-downgrade"
         className="h-full min-h-[320px] w-full"

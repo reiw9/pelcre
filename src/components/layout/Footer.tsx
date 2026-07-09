@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
   BehanceIcon,
   InstagramIcon,
@@ -8,30 +9,31 @@ import {
 } from "@/components/ui/SocialIcons";
 import { useSiteData } from "@/context/DataContext";
 
-const columns = [
-  {
-    title: "Studio",
-    links: [
-      { label: "About", to: "/about" },
-      { label: "Services", to: "/services" },
-      { label: "Projects", to: "/projects" },
-      { label: "Contact", to: "/contact" },
-    ],
-  },
-  {
-    title: "Projects",
-    links: [
-      { label: "Residential", to: "/projects?category=Residential" },
-      { label: "Commercial", to: "/projects?category=Commercial" },
-      { label: "Interior", to: "/projects?category=Interior" },
-      { label: "Landscape", to: "/projects?category=Landscape" },
-    ],
-  },
-];
-
 export function Footer() {
+  const { t } = useTranslation();
   const { architect } = useSiteData();
   const year = new Date().getFullYear();
+
+  const columns = [
+    {
+      title: t("footer.studioHeading"),
+      links: [
+        { label: t("nav.about"), to: "/about" },
+        { label: t("nav.services"), to: "/services" },
+        { label: t("nav.projects"), to: "/projects" },
+        { label: t("nav.contact"), to: "/contact" },
+      ],
+    },
+    {
+      title: t("footer.projectsHeading"),
+      links: [
+        { label: t("categories.Residential"), to: "/projects?category=Residential" },
+        { label: t("categories.Commercial"), to: "/projects?category=Commercial" },
+        { label: t("categories.Interior"), to: "/projects?category=Interior" },
+        { label: t("categories.Landscape"), to: "/projects?category=Landscape" },
+      ],
+    },
+  ];
 
   return (
     <footer className="bg-ink text-bone">
@@ -48,7 +50,7 @@ export function Footer() {
               href={architect.social.instagram}
               target="_blank"
               rel="noreferrer"
-              aria-label="Instagram"
+              aria-label={t("common.instagram")}
               className="flex h-10 w-10 items-center justify-center rounded-full border border-mist transition-colors hover:border-gold hover:text-gold"
             >
               <InstagramIcon size={16} />
@@ -57,7 +59,7 @@ export function Footer() {
               href={architect.social.linkedin}
               target="_blank"
               rel="noreferrer"
-              aria-label="LinkedIn"
+              aria-label={t("common.linkedin")}
               className="flex h-10 w-10 items-center justify-center rounded-full border border-mist transition-colors hover:border-gold hover:text-gold"
             >
               <LinkedinIcon size={16} />
@@ -66,7 +68,7 @@ export function Footer() {
               href={architect.social.behance}
               target="_blank"
               rel="noreferrer"
-              aria-label="Behance"
+              aria-label={t("common.behance")}
               className="flex h-10 w-10 items-center justify-center rounded-full border border-mist transition-colors hover:border-gold hover:text-gold"
             >
               <BehanceIcon size={16} />
@@ -75,7 +77,7 @@ export function Footer() {
               href={architect.social.x}
               target="_blank"
               rel="noreferrer"
-              aria-label="X (Twitter)"
+              aria-label={t("common.x")}
               className="flex h-10 w-10 items-center justify-center rounded-full border border-mist transition-colors hover:border-gold hover:text-gold"
             >
               <XIcon size={16} />
@@ -105,7 +107,7 @@ export function Footer() {
 
         <div>
           <p className="mb-6 text-xs font-medium tracking-[0.25em] text-mist uppercase">
-            Get in touch
+            {t("footer.getInTouch")}
           </p>
           <a
             href={`mailto:${architect.email}`}
@@ -124,16 +126,14 @@ export function Footer() {
             to="/contact"
             className="mt-6 inline-flex items-center gap-2 text-sm font-medium tracking-wide text-gold uppercase"
           >
-            Start a project <ArrowUpRight size={14} />
+            {t("footer.startAProject")} <ArrowUpRight size={14} />
           </Link>
         </div>
       </div>
 
       <div className="container-lux flex flex-col items-center justify-between gap-4 border-t border-mist py-8 text-xs text-mist sm:flex-row">
-        <p>
-          © {year} {architect.studio}. All rights reserved.
-        </p>
-        <p>Architecture &amp; Interiors — Gaziantep</p>
+        <p>{t("footer.copyright", { year, studio: architect.studio })}</p>
+        <p>{t("footer.tagline")}</p>
       </div>
     </footer>
   );

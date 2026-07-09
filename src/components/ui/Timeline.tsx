@@ -4,16 +4,16 @@ import { ScrollReveal } from "./ScrollReveal";
 export function Timeline({ items }: { items: TimelineItem[] }) {
   return (
     <div className="relative">
-      <div className="absolute top-0 bottom-0 left-0 w-px bg-mist sm:left-[11rem]" />
+      <div className="absolute top-0 bottom-0 start-0 w-px bg-mist sm:start-[11rem]" />
       <div className="space-y-14">
         {items.map((item, i) => (
           <ScrollReveal key={item.title} delay={i * 0.05}>
-            <div className="relative grid gap-2 pl-8 sm:grid-cols-[11rem_1fr] sm:gap-10 sm:pl-0">
-              <span className="absolute top-1.5 left-0 h-2.5 w-2.5 -translate-x-1/2 rounded-full bg-gold sm:left-[11rem]" />
-              <p className="text-sm font-medium tracking-wide text-stone uppercase sm:text-right sm:pr-10">
+            <div className="relative grid gap-2 ps-8 sm:grid-cols-[11rem_1fr] sm:gap-10 sm:ps-0">
+              <span className="absolute top-1.5 start-0 h-2.5 w-2.5 rtl:translate-x-1/2 -translate-x-1/2 rounded-full bg-gold sm:start-[11rem]" />
+              <p className="text-sm font-medium tracking-wide text-stone uppercase sm:text-end sm:pe-10">
                 {item.year}
               </p>
-              <div className="sm:pl-10">
+              <div className="sm:ps-10">
                 <h3 className="font-serif text-2xl text-ink dark:text-bone">
                   {item.title}
                 </h3>

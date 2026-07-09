@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
 import { AlertCircle, CheckCircle2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/cn";
 import { useSiteData } from "@/context/DataContext";
 
@@ -31,21 +32,22 @@ const projectTypes = [
   "Consultation",
 ];
 
-function validate(values: FormState) {
+function validate(values: FormState, t: (key: string) => string) {
   const errors: Partial<Record<keyof FormState, string>> = {};
-  if (!values.name.trim()) errors.name = "Please enter your name.";
+  if (!values.name.trim()) errors.name = t("contactForm.errorName");
   if (!values.email.trim()) {
-    errors.email = "Please enter your email.";
+    errors.email = t("contactForm.errorEmail");
   } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
-    errors.email = "Please enter a valid email address.";
+    errors.email = t("contactForm.errorEmailInvalid");
   }
   if (!values.message.trim() || values.message.trim().length < 10) {
-    errors.message = "Tell us a little more about your project (10+ characters).";
+    errors.message = t("contactForm.errorMessage");
   }
   return errors;
 }
 
 export function ContactForm() {
+  const { t } = useTranslation();
   const { architect } = useSiteData();
   const [values, setValues] = useState<FormState>(initialState);
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
@@ -63,7 +65,7 @@ export function ContactForm() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const validationErrors = validate(values);
+    const validationErrors = validate(values, t);
     setErrors(validationErrors);
     if (Object.keys(validationErrors).length > 0) return;
 
@@ -109,11 +111,10 @@ export function ContactForm() {
       >
         <CheckCircle2 className="text-gold" size={32} strokeWidth={1.5} />
         <h3 className="font-serif text-2xl text-ink dark:text-bone">
-          Thank you, {values.name.split(" ")[0]}.
+          {t("contactForm.thankYou", { name: values.name.split(" ")[0] })}
         </h3>
         <p className="text-sm leading-relaxed text-stone">
-          Your message has been received. We typically reply within two
-          business days to discuss next steps for your project.
+          {t("contactForm.successBody")}
         </p>
         <button
           onClick={() => {
@@ -122,7 +123,7 @@ export function ContactForm() {
           }}
           className="link-underline mt-2 text-sm font-medium text-ink uppercase dark:text-bone"
         >
-          Send another message
+          {t("contactForm.sendAnother")}
         </button>
       </motion.div>
     );
@@ -131,39 +132,39 @@ export function ContactForm() {
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-7">
       <div className="grid gap-7 sm:grid-cols-2">
-        <Field label="Full name" error={errors.name}>
+        <Field label={t("contactForm.fullName")} error={errors.name}>
           <input
             type="text"
             value={values.name}
             onChange={(e) => handleChange("name", e.target.value)}
             className={inputClasses(!!errors.name)}
-            placeholder="Jane Appleseed"
+            placeholder={t("contactForm.placeholderName")}
             aria-invalid={!!errors.name}
           />
         </Field>
-        <Field label="Email address" error={errors.email}>
+        <Field label={t("contactForm.emailAddress")} error={errors.email}>
           <input
             type="email"
             value={values.email}
             onChange={(e) => handleChange("email", e.target.value)}
             className={inputClasses(!!errors.email)}
-            placeholder="jane@example.com"
+            placeholder={t("contactForm.placeholderEmail")}
             aria-invalid={!!errors.email}
           />
         </Field>
       </div>
 
       <div className="grid gap-7 sm:grid-cols-2">
-        <Field label="Phone (optional)">
+        <Field label={t("contactForm.phoneOptional")}>
           <input
             type="tel"
             value={values.phone}
             onChange={(e) => handleChange("phone", e.target.value)}
             className={inputClasses(false)}
-            placeholder="+1 (___) ___-____"
+            placeholder={t("contactForm.placeholderPhone")}
           />
         </Field>
-        <Field label="Project type">
+        <Field label={t("contactForm.projectType")}>
           <select
             value={values.projectType}
             onChange={(e) => handleChange("projectType", e.target.value)}
@@ -171,20 +172,20 @@ export function ContactForm() {
           >
             {projectTypes.map((type) => (
               <option key={type} value={type}>
-                {type}
+                {t(`categories.${type}`)}
               </option>
             ))}
           </select>
         </Field>
       </div>
 
-      <Field label="Tell us about your project" error={errors.message}>
+      <Field label={t("contactForm.tellUsAboutProject")} error={errors.message}>
         <textarea
           rows={5}
           value={values.message}
           onChange={(e) => handleChange("message", e.target.value)}
           className={cn(inputClasses(!!errors.message), "resize-none")}
-          placeholder="Site location, timeline, budget range, and anything else that helps us understand the project..."
+          placeholder={t("contactForm.placeholderMessage")}
           aria-invalid={!!errors.message}
         />
       </Field>
@@ -192,12 +193,11 @@ export function ContactForm() {
       {submitError && (
         <p className="flex items-start gap-2 text-sm text-ink dark:text-bone">
           <AlertCircle size={16} className="mt-0.5 shrink-0" />
-          Something went wrong sending your message. Please try again, or
-          reach us directly at{" "}
+          {t("contactForm.submitErrorText")}{" "}
           <a href={`mailto:${architect.email}`} className="link-underline font-medium">
             {architect.email}
           </a>{" "}
-          or {architect.phone}.
+          {t("contactForm.submitErrorOr")} {architect.phone}.
         </p>
       )}
 
@@ -206,7 +206,7 @@ export function ContactForm() {
         disabled={submitting}
         className="inline-flex items-center gap-2.5 rounded-lg bg-ink px-8 py-4 text-sm font-medium tracking-wide text-paper uppercase transition-opacity hover:opacity-85 disabled:opacity-60 dark:bg-bone dark:text-ink"
       >
-        {submitting ? "Sending..." : "Send message"}
+        {submitting ? t("contactForm.sending") : t("contactForm.sendMessage")}
       </button>
     </form>
   );
