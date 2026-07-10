@@ -114,50 +114,25 @@ function SoftwareSection({
 }
 
 // Rendered instead of SkillsSection + SoftwareSection whenever the two sit next to each
-// other in sectionOrder.about, so they keep sharing one side-by-side row (matching the
-// original design) rather than each taking a full-width section of their own.
+// other in sectionOrder.about, so they merge into one section under a single heading
+// rather than each taking its own full-width section (or a two-column split) with a
+// separate heading.
 function SkillsAndSoftwareSection({
-  skillsFirst,
-  skillsEyebrow,
-  skillsTitle,
+  eyebrow,
+  title,
   skills,
-  softwareEyebrow,
-  softwareTitle,
-  softwareDescription,
   software,
 }: {
-  skillsFirst: boolean;
-  skillsEyebrow: string;
-  skillsTitle: string;
+  eyebrow: string;
+  title: string;
   skills: Skill[];
-  softwareEyebrow: string;
-  softwareTitle: string;
-  softwareDescription: string;
   software: SoftwareItem[];
 }) {
-  const skillsColumn = (
-    <div>
-      <SectionTitle eyebrow={skillsEyebrow} title={skillsTitle} className="mb-12" />
-      <SkillBars skills={skills} />
-    </div>
-  );
-  const softwareColumn = (
-    <div>
-      <SectionTitle
-        eyebrow={softwareEyebrow}
-        title={softwareTitle}
-        description={softwareDescription}
-        className="mb-12"
-      />
-    </div>
-  );
   return (
     <section className="container-lux py-28 sm:py-36">
-      <div className="grid gap-16 lg:grid-cols-2 lg:gap-24">
-        {skillsFirst ? skillsColumn : softwareColumn}
-        {skillsFirst ? softwareColumn : skillsColumn}
-      </div>
-      <div className="mt-4">
+      <SectionTitle eyebrow={eyebrow} title={title} className="mb-12" />
+      <SkillBars skills={skills} />
+      <div className="mt-12">
         <SoftwareGrid items={software} />
       </div>
     </section>
@@ -210,13 +185,9 @@ export function About() {
             nodes.push(
               <SkillsAndSoftwareSection
                 key={`${type}-${next}-${i}`}
-                skillsFirst={type === "aboutSkillsSection"}
-                skillsEyebrow={pc.expertise || t("about.expertise")}
-                skillsTitle={pc.coreSkills || t("about.coreSkills")}
+                eyebrow={pc.expertise || t("about.expertise")}
+                title={pc.coreSkills || t("about.coreSkills")}
                 skills={skills}
-                softwareEyebrow={pc.toolkit || t("about.toolkit")}
-                softwareTitle={pc.softwareTitle || t("about.softwareTitle")}
-                softwareDescription={pc.softwareDescription || t("about.softwareDescription")}
                 software={software}
               />,
             );

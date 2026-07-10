@@ -11,7 +11,6 @@ interface FormState {
   name: string;
   email: string;
   phone: string;
-  projectType: string;
   message: string;
 }
 
@@ -19,18 +18,8 @@ const initialState: FormState = {
   name: "",
   email: "",
   phone: "",
-  projectType: "Residential",
   message: "",
 };
-
-const projectTypes = [
-  "Residential",
-  "Commercial",
-  "Interior",
-  "Landscape",
-  "Renovation",
-  "Consultation",
-];
 
 function validate(values: FormState, t: (key: string) => string) {
   const errors: Partial<Record<keyof FormState, string>> = {};
@@ -85,7 +74,6 @@ export function ContactForm() {
           name: values.name,
           email: values.email,
           phone: values.phone,
-          project_type: values.projectType,
           message: values.message,
         }),
       });
@@ -154,30 +142,15 @@ export function ContactForm() {
         </Field>
       </div>
 
-      <div className="grid gap-7 sm:grid-cols-2">
-        <Field label={t("contactForm.phoneOptional")}>
-          <input
-            type="tel"
-            value={values.phone}
-            onChange={(e) => handleChange("phone", e.target.value)}
-            className={inputClasses(false)}
-            placeholder={t("contactForm.placeholderPhone")}
-          />
-        </Field>
-        <Field label={t("contactForm.projectType")}>
-          <select
-            value={values.projectType}
-            onChange={(e) => handleChange("projectType", e.target.value)}
-            className={inputClasses(false)}
-          >
-            {projectTypes.map((type) => (
-              <option key={type} value={type}>
-                {t(`categories.${type}`)}
-              </option>
-            ))}
-          </select>
-        </Field>
-      </div>
+      <Field label={t("contactForm.phoneOptional")}>
+        <input
+          type="tel"
+          value={values.phone}
+          onChange={(e) => handleChange("phone", e.target.value)}
+          className={inputClasses(false)}
+          placeholder={t("contactForm.placeholderPhone")}
+        />
+      </Field>
 
       <Field label={t("contactForm.tellUsAboutProject")} error={errors.message}>
         <textarea
