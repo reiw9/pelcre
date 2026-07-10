@@ -34,7 +34,11 @@ export function Footer() {
   ];
 
   return (
-    <footer className="bg-ink text-bone">
+    <footer className="relative z-0 overflow-hidden bg-ink text-bone">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute top-0 left-0 h-64 w-64 -translate-x-1/2 rounded-full bg-linen/40 blur-3xl sm:h-[420px] sm:w-[420px] lg:h-[560px] lg:w-[560px]" />
+        <div className="absolute bottom-0 right-0 h-64 w-64 translate-x-1/2 rounded-full bg-gold-soft/40 blur-3xl sm:h-[420px] sm:w-[420px] lg:h-[560px] lg:w-[560px]" />
+      </div>
       <div className="container-lux grid gap-16 py-24 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
         <div>
           <Link to="/" className="font-serif text-3xl">
