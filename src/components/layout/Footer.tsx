@@ -11,7 +11,7 @@ import { useSiteData } from "@/context/DataContext";
 
 export function Footer() {
   const { t } = useTranslation();
-  const { architect } = useSiteData();
+  const { architect, categories } = useSiteData();
   const year = new Date().getFullYear();
 
   const columns = [
@@ -26,12 +26,10 @@ export function Footer() {
     },
     {
       title: t("footer.projectsHeading"),
-      links: [
-        { label: t("categories.Residential"), to: "/projects?category=Residential" },
-        { label: t("categories.Commercial"), to: "/projects?category=Commercial" },
-        { label: t("categories.Interior"), to: "/projects?category=Interior" },
-        { label: t("categories.Landscape"), to: "/projects?category=Landscape" },
-      ],
+      links: categories.map((c) => ({
+        label: c.name,
+        to: `/projects?category=${c.id}`,
+      })),
     },
   ];
 

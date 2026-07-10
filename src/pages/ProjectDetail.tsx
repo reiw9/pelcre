@@ -25,7 +25,7 @@ export function ProjectDetail() {
     { label: t("projectDetail.year"), value: String(project.year) },
     { label: t("projectDetail.area"), value: project.area },
     { label: t("projectDetail.client"), value: project.client },
-    { label: t("projectDetail.category"), value: t(`categories.${project.category}`) },
+    { label: t("projectDetail.category"), value: project.categoryName },
     { label: t("projectDetail.status"), value: t(`status.${project.status}`) },
   ];
 
@@ -58,7 +58,7 @@ export function ProjectDetail() {
             <ArrowLeft size={14} className="rtl:rotate-180" /> {t("projectDetail.allProjects")}
           </Link>
           <p className="mb-5 text-xs font-medium tracking-[0.3em] text-gold-soft uppercase">
-            {t(`categories.${project.category}`)} — {project.location}
+            {project.categoryName} — {project.location}
           </p>
           <h1 className="max-w-3xl font-serif text-5xl leading-[1.05] font-medium text-balance text-bone sm:text-6xl lg:text-7xl">
             {project.title}

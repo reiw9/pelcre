@@ -1,17 +1,7 @@
-export type ProjectCategory =
-  | "Residential"
-  | "Commercial"
-  | "Interior"
-  | "Landscape"
-  | "Concept";
-
-export const categories: ProjectCategory[] = [
-  "Residential",
-  "Commercial",
-  "Interior",
-  "Landscape",
-  "Concept",
-];
+export interface Category {
+  id: string;
+  name: string;
+}
 
 export interface ProjectMaterial {
   name: string;
@@ -21,7 +11,8 @@ export interface ProjectMaterial {
 export interface Project {
   slug: string;
   title: string;
-  category: ProjectCategory;
+  category: string;
+  categoryName: string;
   location: string;
   year: number;
   area: string;
@@ -237,6 +228,7 @@ export interface SiteData {
   pageContent: PageContent;
   sectionOrder: SectionOrder;
   homeFeaturedProjects: Project[];
+  categories: Category[];
   bio: Bio;
   timeline: TimelineItem[];
   skills: Skill[];

@@ -1,11 +1,9 @@
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
-import { useTranslation } from "react-i18next";
 import type { Project } from "@/data/types";
 
 export function ProjectCard({ project, index = 0 }: { project: Project; index?: number }) {
-  const { t } = useTranslation();
   return (
     <motion.div
       layout
@@ -24,7 +22,7 @@ export function ProjectCard({ project, index = 0 }: { project: Project; index?: 
           />
           <div className="absolute inset-0 bg-ink/0 transition-colors duration-500 group-hover:bg-ink/10" />
           <span className="absolute top-5 start-5 rounded-md bg-paper px-3 py-1.5 text-[0.65rem] font-medium tracking-[0.2em] text-ink uppercase">
-            {t(`categories.${project.category}`)}
+            {project.categoryName}
           </span>
           <span className="absolute top-5 end-5 flex h-10 w-10 translate-y-2 items-center justify-center rounded-full bg-paper text-ink opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
             <ArrowUpRight size={16} className="rtl:-scale-x-100" />

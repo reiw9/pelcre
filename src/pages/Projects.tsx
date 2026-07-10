@@ -7,28 +7,27 @@ import { SEO } from "@/components/ui/SEO";
 import { ProjectCard } from "@/components/projects/ProjectCard";
 import { ProjectFilter } from "@/components/projects/ProjectFilter";
 import { useSiteData } from "@/context/DataContext";
-import { categories, type ProjectCategory } from "@/data/types";
 
 const PROJECTS_HERO_FALLBACK =
   "https://images.unsplash.com/photo-1449844908441-8829872d2607?auto=format&fit=crop&w=2400&q=80";
 
 export function Projects() {
   const { t } = useTranslation();
-  const { projects, heroImages, pageContent } = useSiteData();
+  const { projects, categories, heroImages, pageContent } = useSiteData();
   const pc = pageContent.projects;
   const [searchParams, setSearchParams] = useSearchParams();
-  const categoryParam = searchParams.get("category") as ProjectCategory | null;
-  const [active, setActive] = useState<ProjectCategory | "All">(
-    categoryParam && categories.includes(categoryParam) ? categoryParam : "All",
+  const categoryParam = searchParams.get("category");
+  const [active, setActive] = useState<string | "All">(
+    categoryParam && categories.some((c) => c.id === categoryParam) ? categoryParam : "All",
   );
 
   useEffect(() => {
-    if (categoryParam && categories.includes(categoryParam)) {
+    if (categoryParam && categories.some((c) => c.id === categoryParam)) {
       setActive(categoryParam);
     }
-  }, [categoryParam]);
+  }, [categoryParam, categories]);
 
-  const handleChange = (category: ProjectCategory | "All") => {
+  const handleChange = (category: string | "All") => {
     setActive(category);
     if (category === "All") {
       searchParams.delete("category");
@@ -40,16 +39,16 @@ export function Projects() {
 
   const filtered = useMemo(
     () => (active === "All" ? projects : projects.filter((p) => p.category === active)),
-    [active],
+    [active, projects],
   );
 
   const counts = useMemo(() => {
     const acc: Record<string, number> = { All: projects.length };
     categories.forEach((c) => {
-      acc[c] = projects.filter((p) => p.category === c).length;
+      acc[c.id] = projects.filter((p) => p.category === c.id).length;
     });
     return acc;
-  }, []);
+  }, [categories, projects]);
 
   return (
     <>
@@ -75,7 +74,6 @@ export function Projects() {
             counts={counts}
             filterLabel={t("projects.filterLabel")}
             allLabel={t("categories.all")}
-            categoryLabel={(c) => t(`categories.${c}`)}
           />
         </div>
 

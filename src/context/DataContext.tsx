@@ -26,7 +26,7 @@ import {
 const PROJECT_FIELDS = `
   title,
   "slug": slug.current,
-  category,
+  "category": category->{_id, name},
   location,
   year,
   area,
@@ -45,6 +45,8 @@ const PROJECT_FIELDS = `
 `;
 
 const PROJECTS_QUERY = `*[_type == "project"] | order(year desc){${PROJECT_FIELDS}}`;
+
+const CATEGORIES_QUERY = `*[_type == "projectCategory"] | order(order asc){_id, name}`;
 
 const SETTINGS_QUERY = `*[_type == "siteSettings"][0]{
   ...,
@@ -103,7 +105,8 @@ function mapProject(doc: any, lang: SupportedLanguage): Project {
   return {
     slug: doc.slug,
     title: doc.title,
-    category: doc.category,
+    category: doc.category?._id ?? "",
+    categoryName: pickLocale(doc.category?.name, lang),
     location: doc.location ?? "",
     year: doc.year,
     area: doc.area ?? "",
@@ -131,7 +134,15 @@ function mapProject(doc: any, lang: SupportedLanguage): Project {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function buildSiteData(rawProjects: any[], settings: any, lang: SupportedLanguage): SiteData {
+function buildSiteData(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  rawProjects: any[],
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  rawCategories: any[],
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  settings: any,
+  lang: SupportedLanguage,
+): SiteData {
   return {
     architect: {
       name: settings.name,
@@ -216,6 +227,10 @@ function buildSiteData(rawProjects: any[], settings: any, lang: SupportedLanguag
       .filter((doc: any) => doc && doc.slug)
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .map((doc: any) => mapProject(doc, lang)),
+    categories: rawCategories.map((doc) => ({
+      id: doc._id,
+      name: pickLocale(doc.name, lang),
+    })),
     bio: {
       paragraphs: splitParagraphs(pickLocale(settings.bioParagraphs, lang)),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -302,6 +317,8 @@ interface RawData {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   rawProjects: any[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  rawCategories: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   settings: any;
 }
 
@@ -315,15 +332,16 @@ export function DataProvider({ children }: { children: ReactNode }) {
 
     Promise.all([
       sanityClient.fetch(PROJECTS_QUERY),
+      sanityClient.fetch(CATEGORIES_QUERY),
       sanityClient.fetch(SETTINGS_QUERY),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ]).then(([rawProjects, settings]: [any[], any]) => {
+    ]).then(([rawProjects, rawCategories, settings]: [any[], any[], any]) => {
       if (cancelled) return;
       if (!settings) {
         setError("Site settings haven't been published in Sanity yet.");
         return;
       }
-      setRaw({ rawProjects, settings });
+      setRaw({ rawProjects, rawCategories, settings });
     }).catch((err) => {
       if (!cancelled) setError(err instanceof Error ? err.message : String(err));
     });
@@ -334,7 +352,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const data = useMemo(
-    () => (raw ? buildSiteData(raw.rawProjects, raw.settings, language) : null),
+    () => (raw ? buildSiteData(raw.rawProjects, raw.rawCategories, raw.settings, language) : null),
     [raw, language],
   );
 

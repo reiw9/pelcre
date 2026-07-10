@@ -1,14 +1,13 @@
 import { cn } from "@/lib/cn";
-import type { ProjectCategory } from "@/data/types";
+import type { Category } from "@/data/types";
 
 interface ProjectFilterProps {
-  categories: ProjectCategory[];
-  active: ProjectCategory | "All";
-  onChange: (category: ProjectCategory | "All") => void;
+  categories: Category[];
+  active: string | "All";
+  onChange: (category: string | "All") => void;
   counts: Record<string, number>;
   filterLabel: string;
   allLabel: string;
-  categoryLabel: (category: ProjectCategory) => string;
 }
 
 export function ProjectFilter({
@@ -18,20 +17,22 @@ export function ProjectFilter({
   counts,
   filterLabel,
   allLabel,
-  categoryLabel,
 }: ProjectFilterProps) {
-  const options: (ProjectCategory | "All")[] = ["All", ...categories];
+  const options: { id: string | "All"; label: string }[] = [
+    { id: "All", label: allLabel },
+    ...categories.map((c) => ({ id: c.id, label: c.name })),
+  ];
 
   return (
     <div className="flex flex-wrap gap-3" role="tablist" aria-label={filterLabel}>
       {options.map((option) => {
-        const isActive = active === option;
+        const isActive = active === option.id;
         return (
           <button
-            key={option}
+            key={option.id}
             role="tab"
             aria-selected={isActive}
-            onClick={() => onChange(option)}
+            onClick={() => onChange(option.id)}
             className={cn(
               "rounded-full border px-5 py-2.5 text-xs font-medium tracking-[0.15em] uppercase transition-colors duration-300",
               isActive
@@ -39,8 +40,8 @@ export function ProjectFilter({
                 : "border-mist text-stone hover:border-ink hover:text-ink dark:hover:text-bone",
             )}
           >
-            {option === "All" ? allLabel : categoryLabel(option)}
-            <span className="ms-1.5 opacity-60">({counts[option] ?? 0})</span>
+            {option.label}
+            <span className="ms-1.5 opacity-60">({counts[option.id] ?? 0})</span>
           </button>
         );
       })}
