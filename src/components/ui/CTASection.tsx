@@ -20,11 +20,7 @@ export function CTASection({
   const { t } = useTranslation();
   const resolvedEyebrow = eyebrow ?? t("footer.startAProject");
   return (
-    <section className="relative z-0 overflow-hidden bg-ink py-28 sm:py-36">
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute top-0 left-0 h-64 w-64 -translate-x-1/2 -translate-y-1/3 rounded-full bg-gold-soft/40 blur-3xl sm:h-[420px] sm:w-[420px] lg:h-[560px] lg:w-[560px]" />
-        <div className="absolute right-0 bottom-0 h-64 w-64 translate-x-1/2 translate-y-1/3 rounded-full bg-linen/40 blur-3xl sm:h-[420px] sm:w-[420px] lg:h-[560px] lg:w-[560px]" />
-      </div>
+    <section className="bg-ink py-28 sm:py-36">
       <div className="container-lux text-center">
         <ScrollReveal className="mx-auto max-w-3xl">
           <p className="mb-5 text-xs font-medium tracking-[0.3em] text-gold-soft uppercase">

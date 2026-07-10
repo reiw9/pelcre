@@ -17,7 +17,7 @@ export function BackToTop() {
           transition={{ duration: 0.4 }}
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           aria-label={t("common.backToTop")}
-          className="fixed end-6 bottom-6 z-40 flex h-11 w-11 items-center justify-center rounded-full border border-mist bg-paper text-charcoal shadow-sm transition-colors hover:border-gold hover:text-gold sm:end-10 sm:bottom-10 dark:bg-ink dark:text-bone"
+          className="fixed end-6 bottom-6 z-40 flex h-11 w-11 items-center justify-center rounded-full border border-mist bg-ink text-paper shadow-sm transition-opacity hover:opacity-85 sm:end-10 sm:bottom-10 dark:bg-bone dark:text-ink"
         >
           <ArrowUp size={18} strokeWidth={1.75} />
         </motion.button>

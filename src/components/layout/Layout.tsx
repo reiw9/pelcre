@@ -8,15 +8,14 @@ import { cn } from "@/lib/cn";
 
 // Evenly spaced from top to bottom of the full page so the accent runs the whole way
 // down, alternating sides/colors for rhythm rather than a repeating mechanical pattern.
+// Kept behind all page content (-z-10) so it can never sit on top of text or buttons —
+// it will naturally be hidden behind photos and solid-color sections, which is expected.
 const SIDE_ACCENTS = [
-  { top: "2%", side: "left" },
-  { top: "16%", side: "right" },
-  { top: "30%", side: "left" },
-  { top: "44%", side: "right" },
-  { top: "58%", side: "left" },
-  { top: "72%", side: "right" },
-  { top: "86%", side: "left" },
-  { top: "100%", side: "right" },
+  { top: "6%", side: "left" },
+  { top: "27%", side: "right" },
+  { top: "48%", side: "left" },
+  { top: "69%", side: "right" },
+  { top: "90%", side: "left" },
 ] as const;
 
 export function Layout() {
@@ -30,9 +29,9 @@ export function Layout() {
           <div
             key={i}
             className={cn(
-              "absolute h-64 w-64 rounded-full blur-3xl sm:h-[420px] sm:w-[420px] lg:h-[640px] lg:w-[640px]",
+              "absolute h-64 w-64 rounded-full sm:h-96 sm:w-96 lg:h-[480px] lg:w-[480px]",
               accent.side === "left" ? "left-0 -translate-x-1/2" : "right-0 translate-x-1/2",
-              i % 2 === 0 ? "bg-gold/50 dark:bg-linen/40" : "bg-ink/45 dark:bg-gold-soft/40",
+              i % 2 === 0 ? "bg-gold/35 dark:bg-linen/30" : "bg-ink/30 dark:bg-gold-soft/30",
             )}
             style={{ top: accent.top }}
           />
