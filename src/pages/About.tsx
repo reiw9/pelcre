@@ -40,7 +40,7 @@ function BiographySection({
               src={founderPhoto}
               alt={portraitAlt}
               loading="lazy"
-              className="h-full w-full object-cover object-top grayscale"
+              className="h-full w-full object-cover object-top"
             />
           </div>
         </div>
