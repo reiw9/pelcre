@@ -177,10 +177,65 @@ export interface PageContent {
   contact: ContactPageContent;
 }
 
+export type HomeSectionType =
+  | "homeIntroQuoteSection"
+  | "homeFeaturedProjectsSection"
+  | "homeAboutPreviewSection"
+  | "homeTestimonialsSection"
+  | "homeCtaSection";
+
+export const HOME_SECTION_TYPES: HomeSectionType[] = [
+  "homeIntroQuoteSection",
+  "homeFeaturedProjectsSection",
+  "homeAboutPreviewSection",
+  "homeTestimonialsSection",
+  "homeCtaSection",
+];
+
+export type AboutSectionType =
+  | "aboutBiographySection"
+  | "aboutTimelineSection"
+  | "aboutSkillsSection"
+  | "aboutSoftwareSection"
+  | "aboutAwardsSection"
+  | "aboutCtaSection";
+
+export const ABOUT_SECTION_TYPES: AboutSectionType[] = [
+  "aboutBiographySection",
+  "aboutTimelineSection",
+  "aboutSkillsSection",
+  "aboutSoftwareSection",
+  "aboutAwardsSection",
+  "aboutCtaSection",
+];
+
+export type ServicesSectionType = "servicesCtaSection";
+
+export const SERVICES_SECTION_TYPES: ServicesSectionType[] = ["servicesCtaSection"];
+
+export type ContactSectionType =
+  | "contactDetailsSection"
+  | "contactSocialLinksSection"
+  | "contactStudioMapSection";
+
+export const CONTACT_SECTION_TYPES: ContactSectionType[] = [
+  "contactDetailsSection",
+  "contactSocialLinksSection",
+  "contactStudioMapSection",
+];
+
+export interface SectionOrder {
+  home: HomeSectionType[];
+  about: AboutSectionType[];
+  services: ServicesSectionType[];
+  contact: ContactSectionType[];
+}
+
 export interface SiteData {
   architect: Architect;
   heroImages: HeroImages;
   pageContent: PageContent;
+  sectionOrder: SectionOrder;
   bio: Bio;
   timeline: TimelineItem[];
   skills: Skill[];

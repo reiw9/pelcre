@@ -22,7 +22,7 @@ const SERVICES_HERO_FALLBACK =
 
 export function Services() {
   const { t } = useTranslation();
-  const { services, heroImages, pageContent } = useSiteData();
+  const { services, heroImages, pageContent, sectionOrder } = useSiteData();
   const pc = pageContent.services;
 
   return (
@@ -86,12 +86,23 @@ export function Services() {
         </div>
       </section>
 
-      <CTASection
-        title={pc.ctaTitle || t("services.ctaTitle")}
-        description={pc.ctaDescription || t("services.ctaDescription")}
-        buttonLabel={t("services.bookConsultation")}
-        buttonTo="/contact"
-      />
+      {sectionOrder.services.map((type, i) => {
+        const key = `${type}-${i}`;
+        switch (type) {
+          case "servicesCtaSection":
+            return (
+              <CTASection
+                key={key}
+                title={pc.ctaTitle || t("services.ctaTitle")}
+                description={pc.ctaDescription || t("services.ctaDescription")}
+                buttonLabel={t("services.bookConsultation")}
+                buttonTo="/contact"
+              />
+            );
+          default:
+            return null;
+        }
+      })}
     </>
   );
 }

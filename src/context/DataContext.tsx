@@ -10,7 +10,18 @@ import { motion, AnimatePresence } from "framer-motion";
 import { sanityClient, imageUrl, splitParagraphs } from "@/lib/sanity";
 import { useLanguage } from "@/context/LanguageContext";
 import type { SupportedLanguage } from "@/i18n";
-import type { Project, SiteData } from "@/data/types";
+import {
+  HOME_SECTION_TYPES,
+  ABOUT_SECTION_TYPES,
+  SERVICES_SECTION_TYPES,
+  CONTACT_SECTION_TYPES,
+  type Project,
+  type SiteData,
+  type HomeSectionType,
+  type AboutSectionType,
+  type ServicesSectionType,
+  type ContactSectionType,
+} from "@/data/types";
 
 const PROJECTS_QUERY = `*[_type == "project"] | order(year desc){
   title,
@@ -40,6 +51,46 @@ function pickLocale(field: any, lang: SupportedLanguage): string {
   if (!field) return "";
   if (typeof field === "string") return field;
   return field[lang] ?? field.en ?? "";
+}
+
+const DEFAULT_HOME_SECTIONS: HomeSectionType[] = [
+  "homeIntroQuoteSection",
+  "homeFeaturedProjectsSection",
+  "homeAboutPreviewSection",
+  "homeTestimonialsSection",
+  "homeCtaSection",
+];
+
+const DEFAULT_ABOUT_SECTIONS: AboutSectionType[] = [
+  "aboutBiographySection",
+  "aboutTimelineSection",
+  "aboutSkillsSection",
+  "aboutSoftwareSection",
+  "aboutAwardsSection",
+  "aboutCtaSection",
+];
+
+const DEFAULT_SERVICES_SECTIONS: ServicesSectionType[] = ["servicesCtaSection"];
+
+const DEFAULT_CONTACT_SECTIONS: ContactSectionType[] = [
+  "contactDetailsSection",
+  "contactSocialLinksSection",
+  "contactStudioMapSection",
+];
+
+// Sanity array items only carry `_type` (the block acts as a marker, not a content container) —
+// content still comes from the existing siteSettings/project data. `raw == null` (field never
+// touched in Studio) falls back to the default order; an explicit empty array means the site
+// owner intentionally removed every section, and that must be respected, not overridden.
+function pickSections<T extends string>(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  raw: any[] | null | undefined,
+  validTypes: T[],
+  fallback: T[],
+): T[] {
+  if (raw == null) return fallback;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return raw.map((item: any) => item._type).filter((type): type is T => validTypes.includes(type));
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -147,6 +198,12 @@ function buildSiteData(rawProjects: any[], settings: any, lang: SupportedLanguag
         contactDetails: pickLocale(settings.pageContent?.contact?.contactDetails, lang),
         followTheStudio: pickLocale(settings.pageContent?.contact?.followTheStudio, lang),
       },
+    },
+    sectionOrder: {
+      home: pickSections(settings.sectionOrder?.home, HOME_SECTION_TYPES, DEFAULT_HOME_SECTIONS),
+      about: pickSections(settings.sectionOrder?.about, ABOUT_SECTION_TYPES, DEFAULT_ABOUT_SECTIONS),
+      services: pickSections(settings.sectionOrder?.services, SERVICES_SECTION_TYPES, DEFAULT_SERVICES_SECTIONS),
+      contact: pickSections(settings.sectionOrder?.contact, CONTACT_SECTION_TYPES, DEFAULT_CONTACT_SECTIONS),
     },
     bio: {
       paragraphs: splitParagraphs(pickLocale(settings.bioParagraphs, lang)),
