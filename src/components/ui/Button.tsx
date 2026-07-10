@@ -33,8 +33,7 @@ type ButtonProps = LinkButtonProps | AnchorButtonProps | ClickButtonProps;
 
 const variantClasses = {
   primary: "bg-ink text-paper hover:opacity-85 dark:bg-bone dark:text-ink",
-  outline:
-    "border border-linen/40 text-linen hover:border-linen hover:bg-linen/10 bg-transparent",
+  outline: "border border-linen bg-linen text-ink hover:opacity-85",
   ghost: "bg-transparent hover:text-gold",
 };
 

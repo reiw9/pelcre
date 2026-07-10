@@ -156,7 +156,7 @@ export function Home() {
             initial={{ opacity: 0, y: 32 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.1, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
-            className="max-w-5xl font-serif text-6xl leading-[1.02] font-medium text-balance text-bone sm:text-7xl lg:text-8xl xl:text-9xl"
+            className="max-w-4xl font-serif text-6xl leading-[1.02] font-medium text-balance text-bone sm:text-7xl lg:text-8xl"
           >
             {architect.name}
           </motion.h1>
