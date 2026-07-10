@@ -149,25 +149,6 @@ export function ProjectDetail() {
         </section>
       )}
 
-      {/* Materials */}
-      <section className="container-lux pb-28 sm:pb-36">
-        <SectionTitle eyebrow={t("projectDetail.specification")} title={t("projectDetail.materials")} className="mb-14" />
-        <div className="divide-y divide-mist border-t border-b border-mist">
-          {project.materials.map((material, i) => (
-            <ScrollReveal key={material.name} delay={i * 0.04}>
-              <div className="flex flex-col gap-1 py-6 sm:flex-row sm:items-baseline sm:justify-between">
-                <p className="font-serif text-xl text-ink dark:text-bone">
-                  {material.name}
-                </p>
-                <p className="text-sm text-stone sm:text-end">
-                  {material.detail}
-                </p>
-              </div>
-            </ScrollReveal>
-          ))}
-        </div>
-      </section>
-
       {/* Next project */}
       <Link
         to={`/projects/${nextProject.slug}`}
