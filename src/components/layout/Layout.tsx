@@ -12,11 +12,10 @@ export function Layout() {
   return (
     <div className="relative flex min-h-screen flex-col">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute top-[8%] left-0 h-20 w-20 -translate-x-1/2 rounded-full bg-gold/60 sm:h-40 sm:w-40 lg:h-72 lg:w-72 dark:bg-linen/50" />
-        <div className="absolute top-[26%] right-0 h-20 w-20 translate-x-1/2 rounded-full bg-ink/50 sm:h-40 sm:w-40 lg:h-72 lg:w-72 dark:bg-gold-soft/50" />
-        <div className="absolute top-[52%] left-0 h-20 w-20 -translate-x-1/2 rounded-full bg-ink/50 sm:h-40 sm:w-40 lg:h-72 lg:w-72 dark:bg-gold-soft/50" />
-        <div className="absolute top-[74%] right-0 h-20 w-20 translate-x-1/2 rounded-full bg-gold/60 sm:h-40 sm:w-40 lg:h-72 lg:w-72 dark:bg-linen/50" />
-        <div className="absolute top-[94%] left-0 h-20 w-20 -translate-x-1/2 rounded-full bg-gold/60 sm:h-40 sm:w-40 lg:h-72 lg:w-72 dark:bg-linen/50" />
+        <div className="absolute top-[6%] left-0 h-56 w-56 -translate-x-1/2 rounded-full bg-gold/45 blur-2xl sm:h-96 sm:w-96 lg:h-[560px] lg:w-[560px] dark:bg-linen/35" />
+        <div className="absolute top-[38%] right-0 h-56 w-56 translate-x-1/2 rounded-full bg-ink/40 blur-2xl sm:h-96 sm:w-96 lg:h-[560px] lg:w-[560px] dark:bg-gold-soft/35" />
+        <div className="absolute top-[70%] left-0 h-56 w-56 -translate-x-1/2 rounded-full bg-ink/40 blur-2xl sm:h-96 sm:w-96 lg:h-[560px] lg:w-[560px] dark:bg-gold-soft/35" />
+        <div className="absolute top-[98%] right-0 h-56 w-56 translate-x-1/2 rounded-full bg-gold/45 blur-2xl sm:h-96 sm:w-96 lg:h-[560px] lg:w-[560px] dark:bg-linen/35" />
       </div>
       <ScrollToTop />
       <Navbar />
