@@ -23,7 +23,7 @@ import {
   type ContactSectionType,
 } from "@/data/types";
 
-const PROJECTS_QUERY = `*[_type == "project"] | order(year desc){
+const PROJECT_FIELDS = `
   title,
   "slug": slug.current,
   category,
@@ -42,9 +42,14 @@ const PROJECTS_QUERY = `*[_type == "project"] | order(year desc){
   floorPlans,
   renders,
   materials
-}`;
+`;
 
-const SETTINGS_QUERY = `*[_type == "siteSettings"][0]`;
+const PROJECTS_QUERY = `*[_type == "project"] | order(year desc){${PROJECT_FIELDS}}`;
+
+const SETTINGS_QUERY = `*[_type == "siteSettings"][0]{
+  ...,
+  homeFeaturedProjects[]->{${PROJECT_FIELDS}}
+}`;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function pickLocale(field: any, lang: SupportedLanguage): string {
@@ -205,6 +210,12 @@ function buildSiteData(rawProjects: any[], settings: any, lang: SupportedLanguag
       services: pickSections(settings.sectionOrder?.services, SERVICES_SECTION_TYPES, DEFAULT_SERVICES_SECTIONS),
       contact: pickSections(settings.sectionOrder?.contact, CONTACT_SECTION_TYPES, DEFAULT_CONTACT_SECTIONS),
     },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    homeFeaturedProjects: (settings.homeFeaturedProjects ?? [])
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .filter((doc: any) => doc && doc.slug)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .map((doc: any) => mapProject(doc, lang)),
     bio: {
       paragraphs: splitParagraphs(pickLocale(settings.bioParagraphs, lang)),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

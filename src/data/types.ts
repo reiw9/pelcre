@@ -236,6 +236,7 @@ export interface SiteData {
   heroImages: HeroImages;
   pageContent: PageContent;
   sectionOrder: SectionOrder;
+  homeFeaturedProjects: Project[];
   bio: Bio;
   timeline: TimelineItem[];
   skills: Skill[];

@@ -112,11 +112,14 @@ function TestimonialsSection({ items }: { items: Testimonial[] }) {
   );
 }
 
+const HOME_FEATURED_PROJECTS_COUNT = 3;
+
 export function Home() {
   const { t } = useTranslation();
-  const { architect, heroImages, pageContent, sectionOrder, bio, testimonials, projects } = useSiteData();
+  const { architect, heroImages, pageContent, sectionOrder, bio, testimonials, homeFeaturedProjects } =
+    useSiteData();
   const pc = pageContent.home;
-  const featuredProjects = projects.filter((p) => p.featured);
+  const featuredProjects = homeFeaturedProjects.slice(0, HOME_FEATURED_PROJECTS_COUNT);
   const heroImage = heroImages.home || HOME_HERO_FALLBACK;
 
   return (
