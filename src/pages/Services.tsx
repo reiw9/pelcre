@@ -17,9 +17,12 @@ const icons: Record<string, LucideIcon> = {
   MessageCircle,
 };
 
+const SERVICES_HERO_FALLBACK =
+  "https://images.unsplash.com/photo-1571939228382-b2f2b585ce15?auto=format&fit=crop&w=2400&q=80";
+
 export function Services() {
   const { t } = useTranslation();
-  const { services } = useSiteData();
+  const { services, heroImages } = useSiteData();
 
   return (
     <>
@@ -32,7 +35,7 @@ export function Services() {
         eyebrow={t("services.whatWeDo")}
         title={t("services.title")}
         description={t("services.description")}
-        image="https://images.unsplash.com/photo-1571939228382-b2f2b585ce15?auto=format&fit=crop&w=2400&q=80"
+        image={heroImages.services || SERVICES_HERO_FALLBACK}
         short
       />
 

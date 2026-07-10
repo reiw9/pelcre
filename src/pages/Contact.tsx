@@ -13,9 +13,12 @@ import { ContactForm } from "@/components/contact/ContactForm";
 import { StudioMap } from "@/components/contact/StudioMap";
 import { useSiteData } from "@/context/DataContext";
 
+const CONTACT_HERO_FALLBACK =
+  "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2400&q=80";
+
 export function Contact() {
   const { t } = useTranslation();
-  const { architect } = useSiteData();
+  const { architect, heroImages } = useSiteData();
 
   return (
     <>
@@ -28,7 +31,7 @@ export function Contact() {
         eyebrow={t("contact.getInTouch")}
         title={t("contact.letsStart")}
         description={t("contact.description")}
-        image="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2400&q=80"
+        image={heroImages.contact || CONTACT_HERO_FALLBACK}
         short
       />
 

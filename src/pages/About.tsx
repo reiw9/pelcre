@@ -10,9 +10,12 @@ import { AwardsList } from "@/components/ui/AwardsList";
 import { CTASection } from "@/components/ui/CTASection";
 import { useSiteData } from "@/context/DataContext";
 
+const ABOUT_HERO_FALLBACK =
+  "https://images.unsplash.com/photo-1523217582562-09d0def993a6?auto=format&fit=crop&w=2400&q=80";
+
 export function About() {
   const { t } = useTranslation();
-  const { architect, bio, timeline, skills, software, awards } = useSiteData();
+  const { architect, heroImages, bio, timeline, skills, software, awards } = useSiteData();
 
   return (
     <>
@@ -25,7 +28,7 @@ export function About() {
         eyebrow={t("about.aboutTheStudio")}
         title={architect.name}
         description={`${architect.title} — ${architect.location}`}
-        image="https://images.unsplash.com/photo-1523217582562-09d0def993a6?auto=format&fit=crop&w=2400&q=80"
+        image={heroImages.about || ABOUT_HERO_FALLBACK}
       />
 
       {/* Biography */}

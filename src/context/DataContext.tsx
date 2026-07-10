@@ -90,6 +90,13 @@ function buildSiteData(rawProjects: any[], settings: any, lang: SupportedLanguag
       address: settings.address,
       social: settings.social ?? { instagram: "", linkedin: "", behance: "", x: "" },
     },
+    heroImages: {
+      home: settings.homeHeroImage ? imageUrl(settings.homeHeroImage, 2400) : "",
+      about: settings.aboutHeroImage ? imageUrl(settings.aboutHeroImage, 2400) : "",
+      projects: settings.projectsHeroImage ? imageUrl(settings.projectsHeroImage, 2400) : "",
+      services: settings.servicesHeroImage ? imageUrl(settings.servicesHeroImage, 2400) : "",
+      contact: settings.contactHeroImage ? imageUrl(settings.contactHeroImage, 2400) : "",
+    },
     bio: {
       paragraphs: splitParagraphs(pickLocale(settings.bioParagraphs, lang)),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

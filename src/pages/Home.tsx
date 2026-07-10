@@ -10,17 +10,21 @@ import { ScrollReveal, ScrollRevealGroup, ScrollRevealItem } from "@/components/
 import { Testimonials } from "@/components/ui/Testimonials";
 import { useSiteData } from "@/context/DataContext";
 
+const HOME_HERO_FALLBACK =
+  "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2400&q=80";
+
 export function Home() {
   const { t } = useTranslation();
-  const { architect, bio, testimonials, projects } = useSiteData();
+  const { architect, heroImages, bio, testimonials, projects } = useSiteData();
   const featuredProjects = projects.filter((p) => p.featured);
+  const heroImage = heroImages.home || HOME_HERO_FALLBACK;
 
   return (
     <>
       <SEO
         title={t("home.seoTitle")}
         description={t("home.seoDescription")}
-        image="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80"
+        image={heroImage}
       />
 
       {/* Hero */}
@@ -29,7 +33,7 @@ export function Home() {
           initial={{ scale: 1.12 }}
           animate={{ scale: 1 }}
           transition={{ duration: 2.4, ease: [0.22, 1, 0.36, 1] }}
-          src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2400&q=80"
+          src={heroImage}
           alt="Meridian House, a minimalist concrete residence overlooking the coast"
           className="absolute inset-0 h-full w-full object-cover"
           loading="eager"

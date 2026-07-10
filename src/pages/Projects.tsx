@@ -9,9 +9,12 @@ import { ProjectFilter } from "@/components/projects/ProjectFilter";
 import { useSiteData } from "@/context/DataContext";
 import { categories, type ProjectCategory } from "@/data/types";
 
+const PROJECTS_HERO_FALLBACK =
+  "https://images.unsplash.com/photo-1449844908441-8829872d2607?auto=format&fit=crop&w=2400&q=80";
+
 export function Projects() {
   const { t } = useTranslation();
-  const { projects } = useSiteData();
+  const { projects, heroImages } = useSiteData();
   const [searchParams, setSearchParams] = useSearchParams();
   const categoryParam = searchParams.get("category") as ProjectCategory | null;
   const [active, setActive] = useState<ProjectCategory | "All">(
@@ -58,7 +61,7 @@ export function Projects() {
         eyebrow={t("projects.portfolio")}
         title={t("projects.selectedProjects")}
         description={t("projects.description")}
-        image="https://images.unsplash.com/photo-1449844908441-8829872d2607?auto=format&fit=crop&w=2400&q=80"
+        image={heroImages.projects || PROJECTS_HERO_FALLBACK}
         short
       />
 

@@ -83,6 +83,14 @@ export interface SocialLinks {
   x: string;
 }
 
+export interface HeroImages {
+  home: string;
+  about: string;
+  projects: string;
+  services: string;
+  contact: string;
+}
+
 export interface Architect {
   name: string;
   studio: string;
@@ -109,6 +117,7 @@ export interface Bio {
 
 export interface SiteData {
   architect: Architect;
+  heroImages: HeroImages;
   bio: Bio;
   timeline: TimelineItem[];
   skills: Skill[];
