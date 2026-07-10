@@ -47,7 +47,7 @@ function FeaturedProjectsSection({
       <div className="mb-16 flex flex-wrap items-end justify-between gap-8">
         <SectionTitle eyebrow={eyebrow} title={title} description={description} />
         <ScrollReveal delay={0.15}>
-          <Button to="/projects" variant="outline" className="text-ink dark:text-bone">
+          <Button to="/projects" variant="outline">
             {allLabel}
           </Button>
         </ScrollReveal>
@@ -93,7 +93,7 @@ function AboutPreviewSection({
         </h2>
         {bioParagraph && <p className="mt-6 max-w-md leading-relaxed text-stone">{bioParagraph}</p>}
         <div className="mt-9">
-          <Button to="/about" variant="outline" className="text-ink dark:text-bone">
+          <Button to="/about" variant="outline">
             {linkLabel}
           </Button>
         </div>
@@ -143,7 +143,7 @@ export function Home() {
         />
         <div className="absolute inset-0 bg-ink/45" />
 
-        <div className="container-lux relative z-10 pb-20 sm:pb-28">
+        <div className="relative z-10 px-6 pb-20 sm:px-10 sm:pb-28 lg:px-16">
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -156,7 +156,7 @@ export function Home() {
             initial={{ opacity: 0, y: 32 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.1, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
-            className="max-w-4xl font-serif text-6xl leading-[1.02] font-medium text-balance text-bone sm:text-7xl lg:text-8xl"
+            className="max-w-5xl font-serif text-6xl leading-[1.02] font-medium text-balance text-bone sm:text-7xl lg:text-8xl xl:text-9xl"
           >
             {architect.name}
           </motion.h1>

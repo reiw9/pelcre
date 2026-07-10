@@ -96,7 +96,7 @@ export function Services() {
                 key={key}
                 title={pc.ctaTitle || t("services.ctaTitle")}
                 description={pc.ctaDescription || t("services.ctaDescription")}
-                buttonLabel={t("services.bookConsultation")}
+                buttonLabel={t("contact.getInTouch")}
                 buttonTo="/contact"
               />
             );

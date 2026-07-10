@@ -11,6 +11,14 @@ export function Layout() {
 
   return (
     <div className="flex min-h-screen flex-col">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed top-1/2 left-0 z-0 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold/25 dark:bg-linen/20"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed top-1/2 right-0 z-0 h-[420px] w-[420px] translate-x-1/2 -translate-y-1/2 rounded-full bg-ink/20 dark:bg-gold-soft/20"
+      />
       <ScrollToTop />
       <Navbar />
       <AnimatePresence mode="wait" initial={false}>
