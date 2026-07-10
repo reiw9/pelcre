@@ -53,8 +53,9 @@ export function Projects() {
   return (
     <>
       <SEO
-        title={t("projects.seoTitle")}
-        description={t("projects.seoDescription")}
+        title={pc.seoTitle || t("projects.seoTitle")}
+        description={pc.seoDescription || t("projects.seoDescription")}
+        image={heroImages.projects || PROJECTS_HERO_FALLBACK}
       />
 
       <PageHero

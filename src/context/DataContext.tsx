@@ -166,6 +166,8 @@ function buildSiteData(
     },
     pageContent: {
       home: {
+        seoTitle: pickLocale(settings.pageContent?.home?.seoTitle, lang),
+        seoDescription: pickLocale(settings.pageContent?.home?.seoDescription, lang),
         heroBadge: pickLocale(settings.pageContent?.home?.heroBadge, lang),
         heroTaglineSuffix: pickLocale(settings.pageContent?.home?.heroTaglineSuffix, lang),
         quote: pickLocale(settings.pageContent?.home?.quote, lang),
@@ -179,6 +181,8 @@ function buildSiteData(
         ctaDescription: pickLocale(settings.pageContent?.home?.ctaDescription, lang),
       },
       about: {
+        seoTitle: pickLocale(settings.pageContent?.about?.seoTitle, lang),
+        seoDescription: pickLocale(settings.pageContent?.about?.seoDescription, lang),
         aboutTheStudio: pickLocale(settings.pageContent?.about?.aboutTheStudio, lang),
         biography: pickLocale(settings.pageContent?.about?.biography, lang),
         designAsAct: pickLocale(settings.pageContent?.about?.designAsAct, lang),
@@ -196,6 +200,8 @@ function buildSiteData(
         ctaDescription: pickLocale(settings.pageContent?.about?.ctaDescription, lang),
       },
       services: {
+        seoTitle: pickLocale(settings.pageContent?.services?.seoTitle, lang),
+        seoDescription: pickLocale(settings.pageContent?.services?.seoDescription, lang),
         whatWeDo: pickLocale(settings.pageContent?.services?.whatWeDo, lang),
         title: pickLocale(settings.pageContent?.services?.title, lang),
         description: pickLocale(settings.pageContent?.services?.description, lang),
@@ -203,11 +209,15 @@ function buildSiteData(
         ctaDescription: pickLocale(settings.pageContent?.services?.ctaDescription, lang),
       },
       projects: {
+        seoTitle: pickLocale(settings.pageContent?.projects?.seoTitle, lang),
+        seoDescription: pickLocale(settings.pageContent?.projects?.seoDescription, lang),
         portfolio: pickLocale(settings.pageContent?.projects?.portfolio, lang),
         selectedProjects: pickLocale(settings.pageContent?.projects?.selectedProjects, lang),
         description: pickLocale(settings.pageContent?.projects?.description, lang),
       },
       contact: {
+        seoTitle: pickLocale(settings.pageContent?.contact?.seoTitle, lang),
+        seoDescription: pickLocale(settings.pageContent?.contact?.seoDescription, lang),
         getInTouch: pickLocale(settings.pageContent?.contact?.getInTouch, lang),
         letsStart: pickLocale(settings.pageContent?.contact?.letsStart, lang),
         description: pickLocale(settings.pageContent?.contact?.description, lang),

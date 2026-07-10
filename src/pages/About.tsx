@@ -157,8 +157,9 @@ export function About() {
   return (
     <>
       <SEO
-        title={t("about.seoTitle")}
-        description={t("about.seoDescription")}
+        title={pc.seoTitle || t("about.seoTitle")}
+        description={pc.seoDescription || t("about.seoDescription")}
+        image={heroImages.about || ABOUT_HERO_FALLBACK}
       />
 
       <PageHero

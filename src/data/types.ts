@@ -107,6 +107,8 @@ export interface Bio {
 }
 
 export interface HomePageContent {
+  seoTitle: string;
+  seoDescription: string;
   heroBadge: string;
   heroTaglineSuffix: string;
   quote: string;
@@ -121,6 +123,8 @@ export interface HomePageContent {
 }
 
 export interface AboutPageContent {
+  seoTitle: string;
+  seoDescription: string;
   aboutTheStudio: string;
   biography: string;
   designAsAct: string;
@@ -139,6 +143,8 @@ export interface AboutPageContent {
 }
 
 export interface ServicesPageContent {
+  seoTitle: string;
+  seoDescription: string;
   whatWeDo: string;
   title: string;
   description: string;
@@ -147,12 +153,16 @@ export interface ServicesPageContent {
 }
 
 export interface ProjectsPageContent {
+  seoTitle: string;
+  seoDescription: string;
   portfolio: string;
   selectedProjects: string;
   description: string;
 }
 
 export interface ContactPageContent {
+  seoTitle: string;
+  seoDescription: string;
   getInTouch: string;
   letsStart: string;
   description: string;

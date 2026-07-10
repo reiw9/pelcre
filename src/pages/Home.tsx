@@ -125,8 +125,8 @@ export function Home() {
   return (
     <>
       <SEO
-        title={t("home.seoTitle")}
-        description={t("home.seoDescription")}
+        title={pc.seoTitle || t("home.seoTitle")}
+        description={pc.seoDescription || t("home.seoDescription")}
         image={heroImage}
       />
 

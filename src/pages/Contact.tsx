@@ -24,8 +24,9 @@ export function Contact() {
   return (
     <>
       <SEO
-        title={t("contact.seoTitle")}
-        description={t("contact.seoDescription")}
+        title={pc.seoTitle || t("contact.seoTitle")}
+        description={pc.seoDescription || t("contact.seoDescription")}
+        image={heroImages.contact || CONTACT_HERO_FALLBACK}
       />
 
       <PageHero

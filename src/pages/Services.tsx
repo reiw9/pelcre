@@ -28,8 +28,9 @@ export function Services() {
   return (
     <>
       <SEO
-        title={t("services.seoTitle")}
-        description={t("services.seoDescription")}
+        title={pc.seoTitle || t("services.seoTitle")}
+        description={pc.seoDescription || t("services.seoDescription")}
+        image={heroImages.services || SERVICES_HERO_FALLBACK}
       />
 
       <PageHero
