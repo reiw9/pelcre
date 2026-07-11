@@ -55,9 +55,13 @@ All content (projects, bio, services, timeline, skills, software, awards, testim
 
 `src/components/contact/ContactForm.tsx` posts directly to the Web3Forms API (`https://api.web3forms.com/submit`) — no backend code needed. The access key is a hardcoded constant in that file; this is intentional and safe, not a leaked secret — Web3Forms access keys are designed to be public/client-embedded (same as how Web3Forms' own docs show it in plain HTML). Submissions currently deliver to whatever email was used to generate that key (confirm with the site owner which inbox — it was set up understanding it might need to move to the business inbox later; regenerating the key and swapping the constant is a one-line change). On failure, the form shows an inline error with a `mailto:`/`tel:` fallback to the architect's contact info instead of a silent/fake success state.
 
+## Privacy policy
+
+`/privacy` (`src/pages/Privacy.tsx`) is a static, plain-i18n page (not Sanity-backed — deliberately simple boilerplate, not something the owner needs to edit often) covering: contact form data collected, Web3Forms as the processor, Cloudflare Web Analytics being cookie-free, localStorage usage for language/theme preference, and the Google Maps embed on the Contact page. Linked from the Footer's bottom bar next to the copyright line. Content lives in the `privacy.*` i18n keys (`en/tr/ar.ts`) — edit those directly (no CMS) if the wording ever needs to change. Not legal advice; if requirements get more specific (GDPR/KVKK formal compliance), revisit with a real policy.
+
 ## SEO & discoverability
 
-- `scripts/generate-sitemap.mjs` runs automatically as part of `npm run build` (wired into the `"build"` script in `package.json`), querying Sanity for live project slugs and writing `public/sitemap.xml` with all static routes + one entry per project. Regenerates fresh on every build/deploy — never hand-edit `public/sitemap.xml` (it's gitignored).
+- `/sitemap.xml` is generated dynamically at request time by `src/worker.ts` (the Worker's `fetch` handler intercepts that one path before falling through to static assets) — it queries Sanity live for project slugs on each request, edge-cached for 1 hour (`Cache-Control: s-maxage=3600`). No build step or static file involved (the old `scripts/generate-sitemap.mjs` build-time approach was replaced by this — don't recreate it). `STATIC_ROUTES` in `worker.ts` is the hardcoded list of non-project pages included — **add a new page's path there** whenever a new top-level route is added, or it won't show up in the sitemap.
 - `src/components/ui/SEO.tsx` sets canonical URL, `og:url`, and full Twitter Card tags per page (in addition to title/description/og:image), computed from the current route via `useLocation()`.
 
 ## Analytics

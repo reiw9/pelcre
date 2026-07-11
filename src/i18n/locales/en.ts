@@ -39,6 +39,7 @@ const en = {
     startAProject: "Start a project",
     copyright: "© {{year}} {{studio}}. All rights reserved.",
     tagline: "Architecture & Interiors — Gaziantep",
+    privacyPolicy: "Privacy Policy",
   },
   home: {
     seoTitle: "Architecture & Interiors",
@@ -155,6 +156,32 @@ const en = {
     description:
       "The page you're looking for may have been moved, renamed, or never existed. Let's get you back to solid ground.",
     backToHome: "Back to Home",
+  },
+  privacy: {
+    seoTitle: "Privacy Policy",
+    seoDescription: "How Pelmot Creativity collects, uses, and protects your information.",
+    eyebrow: "Legal",
+    title: "Privacy Policy",
+    lastUpdated: "Last updated: July 2026",
+    intro:
+      "Pelmot Creativity respects your privacy. This page explains what information we collect when you visit this website or get in touch, and how it's used.",
+    collectTitle: "Information We Collect",
+    collectBody:
+      "When you submit the contact form, we collect the information you provide: your name, email address, phone number (if given), and your message. We don't collect any other personal information, and we don't use tracking cookies.",
+    useTitle: "How We Use It",
+    useBody:
+      "We use this information only to respond to your inquiry. Contact form submissions are processed through Web3Forms, a third-party form delivery service, and sent directly to our email. We don't sell, rent, or share your information with any other third party.",
+    analyticsTitle: "Analytics",
+    analyticsBody:
+      "This site uses Cloudflare Web Analytics to understand overall traffic. It's cookie-free and doesn't collect or store any personal data or IP addresses — only aggregate, anonymous statistics.",
+    storageTitle: "Local Storage",
+    storageBody:
+      "We store your language and light/dark mode preference in your browser's local storage so the site remembers your choice on your next visit. This isn't used for tracking and isn't shared with anyone.",
+    thirdPartyTitle: "Third-Party Content",
+    thirdPartyBody:
+      "The Contact page embeds a Google Maps view of our studio location. Google's own privacy policy applies to that embed. Social media links on this site lead to third-party platforms with their own privacy practices.",
+    contactTitle: "Contact",
+    contactBody: "If you have any questions about this policy or your data, reach out at",
   },
   contactForm: {
     fullName: "Full name",

@@ -131,7 +131,12 @@ export function Footer() {
 
       <div className="container-lux flex flex-col items-center justify-between gap-4 border-t border-mist py-8 text-xs text-mist sm:flex-row">
         <p>{t("footer.copyright", { year, studio: architect.studio })}</p>
-        <p>{t("footer.tagline")}</p>
+        <div className="flex items-center gap-6">
+          <Link to="/privacy" className="link-underline hover:text-bone">
+            {t("footer.privacyPolicy")}
+          </Link>
+          <p>{t("footer.tagline")}</p>
+        </div>
       </div>
     </footer>
   );

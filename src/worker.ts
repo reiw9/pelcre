@@ -28,6 +28,7 @@ const STATIC_ROUTES = [
   { path: "/projects", priority: "0.9", changefreq: "weekly" },
   { path: "/services", priority: "0.7", changefreq: "monthly" },
   { path: "/contact", priority: "0.6", changefreq: "monthly" },
+  { path: "/privacy", priority: "0.2", changefreq: "yearly" },
 ];
 
 const ONE_HOUR = 60 * 60;

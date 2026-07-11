@@ -41,6 +41,7 @@ const tr: TranslationSchema = {
     startAProject: "Bir proje başlatın",
     copyright: "© {{year}} {{studio}}. Tüm hakları saklıdır.",
     tagline: "Mimarlık & İç Mekan — Gaziantep",
+    privacyPolicy: "Gizlilik Politikası",
   },
   home: {
     seoTitle: "Mimarlık & İç Mekan",
@@ -157,6 +158,32 @@ const tr: TranslationSchema = {
     description:
       "Aradığınız sayfa taşınmış, yeniden adlandırılmış ya da hiç var olmamış olabilir. Sizi güvenli bir yere geri götürelim.",
     backToHome: "Ana Sayfaya Dön",
+  },
+  privacy: {
+    seoTitle: "Gizlilik Politikası",
+    seoDescription: "Pelmot Creativity bilgilerinizi nasıl toplar, kullanır ve korur.",
+    eyebrow: "Yasal",
+    title: "Gizlilik Politikası",
+    lastUpdated: "Son güncelleme: Temmuz 2026",
+    intro:
+      "Pelmot Creativity, gizliliğinize saygı duyar. Bu sayfa, bu web sitesini ziyaret ettiğinizde veya bizimle iletişime geçtiğinizde hangi bilgileri topladığımızı ve bunların nasıl kullanıldığını açıklar.",
+    collectTitle: "Topladığımız Bilgiler",
+    collectBody:
+      "İletişim formunu gönderdiğinizde, sağladığınız bilgileri topluyoruz: adınız, e-posta adresiniz, telefon numaranız (verilmişse) ve mesajınız. Başka herhangi bir kişisel bilgi toplamıyoruz ve izleme çerezleri kullanmıyoruz.",
+    useTitle: "Bilgilerinizi Nasıl Kullanıyoruz",
+    useBody:
+      "Bu bilgileri yalnızca talebinize yanıt vermek için kullanıyoruz. İletişim formu gönderileri, üçüncü taraf bir form iletim hizmeti olan Web3Forms aracılığıyla işlenir ve doğrudan e-postamıza gönderilir. Bilgilerinizi başka hiçbir üçüncü tarafla satmıyor, kiralamıyor veya paylaşmıyoruz.",
+    analyticsTitle: "Analitik",
+    analyticsBody:
+      "Bu site, genel trafiği anlamak için Cloudflare Web Analytics kullanır. Çerez içermez ve herhangi bir kişisel veri veya IP adresi toplamaz veya saklamaz — yalnızca toplu, anonim istatistikler.",
+    storageTitle: "Yerel Depolama",
+    storageBody:
+      "Sitenin bir sonraki ziyaretinizde tercihinizi hatırlaması için dil ve aydınlık/karanlık mod tercihinizi tarayıcınızın yerel depolama alanında saklıyoruz. Bu, izleme amacıyla kullanılmaz ve kimseyle paylaşılmaz.",
+    thirdPartyTitle: "Üçüncü Taraf İçerikler",
+    thirdPartyBody:
+      "İletişim sayfası, stüdyomuzun konumunu gösteren bir Google Haritalar görünümü içerir. Bu gömme için Google'ın kendi gizlilik politikası geçerlidir. Bu sitedeki sosyal medya bağlantıları, kendi gizlilik uygulamalarına sahip üçüncü taraf platformlara yönlendirir.",
+    contactTitle: "İletişim",
+    contactBody: "Bu politika veya verileriniz hakkında sorularınız varsa, bize şu adresten ulaşabilirsiniz:",
   },
   contactForm: {
     fullName: "Ad soyad",

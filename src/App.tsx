@@ -6,6 +6,7 @@ import { Projects } from "@/pages/Projects";
 import { ProjectDetail } from "@/pages/ProjectDetail";
 import { Services } from "@/pages/Services";
 import { Contact } from "@/pages/Contact";
+import { Privacy } from "@/pages/Privacy";
 import { NotFound } from "@/pages/NotFound";
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Route path="/projects/:slug" element={<ProjectDetail />} />
         <Route path="/services" element={<Services />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/privacy" element={<Privacy />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
