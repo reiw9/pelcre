@@ -5,18 +5,20 @@ Architecture portfolio site for **Pelmot Creativity** (real person behind it: Ab
 ## Live URLs
 
 - **Live site**: https://pelmot-creativity.com (also responds on https://www.pelmot-creativity.com and the legacy https://pelcre.myworkss.workers.dev)
-- **Content editor (Sanity Studio)**: https://pelmot-creativity.sanity.studio/ — log in with GitHub (reiw9 / tala.wj@gmail.com)
-- **GitHub repo**: https://github.com/reiw9/pelcre (branch `main`)
+- **Content editor (Sanity Studio)**: https://pelmot-creativity.sanity.studio/ (project ID `cmdikf3a`, unchanged by the ownership transfer below)
+- **GitHub repo**: https://github.com/Pelmot/pelcre (branch `main`)
 - **Web3Forms dashboard** (contact form submissions): https://web3forms.com — signed up with pelmot.creativity@gmail.com
 - **Cloudflare Web Analytics**: Cloudflare dashboard → Analytics & Logs → Web Analytics (under the `pelmot.creativity@gmail.com` account — see Cloudflare account note below)
 
-## Cloudflare account
+## Account ownership — fully migrated off the developer's personal accounts (2026-07-13)
 
-As of 2026-07-13 the Worker deploys to a **different Cloudflare account than it used to** — `pelmot.creativity@gmail.com`'s account (ID `1e8a536df4e8ff6fbf2d1306f3b128c4`), not the original `reiw`/`tala.wj@gmail.com` account. `wrangler.jsonc` pins `account_id` explicitly so `wrangler deploy` always targets the right one regardless of which account the local CLI happens to be logged into. The `pelmot-creativity.com` domain was bought directly through Cloudflare Registrar under the new account, so its DNS zone was already there — no nameserver migration was needed, just `wrangler deploy` with `routes` (`custom_domain: true`) for the apex and `www` in `wrangler.jsonc`.
+Everything this project depends on now lives under Pelmot's own accounts, not the original developer's (`tala.wj@gmail.com` / GitHub `reiw9`):
 
-- **The old account's Worker** (`pelcre.myworkss.workers.dev` under `reiw`) was left running as-is, not deleted — it's serving stale content frozen at whatever was last deployed there before the migration. Revisit whether to delete it or redirect it to the new domain.
-- **Cloudflare Web Analytics beacon token** in `index.html` is still the one registered under the *old* account for `pelcre.myworkss.workers.dev` — it needs to be regenerated under the new account for `pelmot-creativity.com` (Cloudflare dashboard → new account → Analytics & Logs → Web Analytics → add site) and swapped into `index.html`'s `data-cf-beacon` token. Not yet done.
-- Cloudflare Turnstile (bot protection for the contact form) had been deferred pending exactly this account move, since Turnstile widgets + their verification Worker are tied to the specific Cloudflare account they're created in — it can now be set up for real under the new account if wanted.
+- **Cloudflare**: Worker + `pelmot-creativity.com` domain deploy under `pelmot.creativity@gmail.com`'s account (ID `1e8a536df4e8ff6fbf2d1306f3b128c4`). `wrangler.jsonc` pins `account_id` explicitly so `wrangler deploy` always targets the right account regardless of which account the local CLI happens to be logged into. The domain was bought directly through Cloudflare Registrar under this account, so its DNS zone was already there — no nameserver migration was needed, just `wrangler deploy` with `routes` (`custom_domain: true`) for the apex and `www` in `wrangler.jsonc`. The old account's Worker (`pelcre.myworkss.workers.dev`, under the developer's personal `reiw` account) is not deleted but now serves **only** a bare 301 redirect to `pelmot-creativity.com` (see the standalone redirect script pattern in git history/session notes if it ever needs recreating — it's a tiny separate `wrangler.jsonc`/script, not part of this repo, deployed directly to that one Worker).
+- **Cloudflare Web Analytics**: switched from a manual beacon script (tied to the old account/domain, since removed from `index.html`) to **automatic edge injection** — enabled per-hostname in the new account's dashboard, no code involved.
+- **GitHub**: repo transferred from `reiw9/pelcre` to `Pelmot/pelcre`. Old URL still resolves via GitHub's redirect but the local remote and this doc point at the canonical new one.
+- **Sanity**: project (`cmdikf3a`) transferred out of the `reiw9`-owned organization into a new organization owned by Pelmot. Project ID/dataset/Studio URL are all unchanged — only org-level ownership/billing moved. The developer's Sanity MCP access no longer sees this project at all post-transfer, confirming full separation; any future Sanity admin work (schema deploys, CORS origins, etc.) needs to go through an account with access to Pelmot's org.
+- Cloudflare Turnstile (bot protection for the contact form) had been deferred pending exactly this account move — it can now be set up for real under the new Cloudflare account if wanted.
 
 ## Stack
 
