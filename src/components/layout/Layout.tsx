@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import { Suspense, useEffect, useRef, useState, type ReactNode } from "react";
 import { useOutlet, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Navbar } from "./Navbar";
@@ -20,9 +20,40 @@ const SIDE_ACCENTS = [
   { top: "90%", side: "left" },
 ] as const;
 
+// Same ease-out-expo curve ScrollReveal uses elsewhere, so page transitions read as the
+// same motion language rather than a different animation vocabulary.
+const TRANSITION_EASE = [0.22, 1, 0.36, 1] as const;
+const EXIT_MS = 260;
+
+// Deliberately not AnimatePresence + key-based remount (see below) — this defers *when*
+// the new outlet gets committed instead, so `motion.main` never unmounts and there's
+// nothing for a suspending child to corrupt. The old page's content stays put and fades
+// out first; only once that finishes does the new (possibly still-loading) route swap in
+// underneath and fade up, matching how a considered, unhurried transition should feel.
+function useDeferredOutlet(pathname: string, outlet: ReactNode) {
+  const [displayed, setDisplayed] = useState({ pathname, outlet });
+  const [visible, setVisible] = useState(true);
+  const latestOutlet = useRef(outlet);
+  latestOutlet.current = outlet;
+
+  useEffect(() => {
+    if (pathname === displayed.pathname) return;
+    setVisible(false);
+    const timer = setTimeout(() => {
+      setDisplayed({ pathname, outlet: latestOutlet.current });
+      setVisible(true);
+    }, EXIT_MS);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
+
+  return { outlet: displayed.outlet, visible };
+}
+
 export function Layout() {
   const location = useLocation();
   const outlet = useOutlet();
+  const { outlet: displayedOutlet, visible } = useDeferredOutlet(location.pathname, outlet);
 
   return (
     <div className="relative flex min-h-screen flex-col">
@@ -41,25 +72,15 @@ export function Layout() {
       </div>
       <ScrollToTop />
       <Navbar />
-      {/*
-        No AnimatePresence here — its exit/enter choreography relies on tracking mount
-        state via effects, which gets corrupted the moment the entering child is a lazy
-        route that suspends mid-transition (confirmed: both the old and new <main> end up
-        stuck at their starting opacity forever, one visible, one not — not a timing issue,
-        a genuinely broken state). A plain mount-triggered fade-in doesn't have that
-        problem: React just unmounts the old `main` and mounts the new one on key change,
-        Suspense shows PageLoader inside it until the chunk resolves, and the fade-in plays
-        once it does. No exit animation for the outgoing page, but a working site beats a
-        broken animation.
-      */}
       <motion.main
-        key={location.pathname}
         className="flex-1"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+        animate={{ opacity: visible ? 1 : 0, y: visible ? 0 : 10 }}
+        transition={{
+          duration: visible ? 0.5 : EXIT_MS / 1000,
+          ease: TRANSITION_EASE,
+        }}
       >
-        <Suspense fallback={<PageLoader />}>{outlet}</Suspense>
+        <Suspense fallback={<PageLoader />}>{displayedOutlet}</Suspense>
       </motion.main>
       <Footer />
       <BackToTop />
