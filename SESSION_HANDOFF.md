@@ -1,78 +1,55 @@
-# Session Handoff — 2026-07-11 / 2026-07-12
+# Session Handoff — 2026-07-13
 
-Summary of a long working session on the Pelmot Creativity site, for continuing in a fresh chat. Full technical/architectural reference lives in `CLAUDE.md` (auto-loaded every session) — this file is just "what happened recently and what's left."
+Long session on the Pelmot Creativity site. Everything below is done, deployed, and pushed to `main` unless marked otherwise. Full technical detail for all of this already lives in `CLAUDE.md` (auto-loaded every session) — this file is just "what happened and what's left," not a duplicate of the technical docs.
 
-## What this session built (all live, deployed, committed to `main`)
+## What this session did
 
-**Sanity CMS features (all owner-editable from Studio now):**
-- Per-page hero images (`siteSettings.{home,about,projects,services,contact}HeroImage`)
-- Page titles/headings/eyebrows/descriptions (`siteSettings.pageContent.*`)
-- Add/remove/reorder page sections from Studio (`siteSettings.sectionOrder.*`) — e.g. owner can delete the Awards section from About, etc.
-- Home page featured projects: picked + ordered via `siteSettings.homeFeaturedProjects` (reference array), capped to first 3 shown
-- Project categories converted from a fixed 5-value enum to fully owner-managed `projectCategory` documents (rename/add/remove/reorder from Studio)
-- `siteSettings.location` converted to translatable `localeString` (was English-only before)
+**Finished the 4 audits left over from the previous session:**
+- Fixed the real bug found last time: social crawlers (Facebook/X/WhatsApp/etc.) now get server-rendered `<title>`/OG/Twitter tags injected by `src/worker.ts` before the SPA loads, instead of a blank/generic share card. See "SEO & discoverability" in CLAUDE.md.
+- Added long-lived immutable cache headers for hashed JS/CSS (`public/_headers`).
+- Completed a full-site visual QA pass — every page, light/dark, mobile, Arabic/RTL. No bugs found (one stale content note: the Privacy page still mentions a Google Maps embed on Contact that the owner has since hidden via Studio — cosmetic, not fixed).
+- Verified the OG-tag fix live via crawler user-agent requests against production.
 
-**Content/copy changes:**
-- About page bio headline changed to "Design is the soul of what we go through." (translated to TR/AR)
-- Founder photo un-grayscaled (full color)
-- Removed: Contact page Studio Map, Home's "A cross-section of..." blurb, project detail Challenge/Solution section, project detail Specification/Materials section, Contact form's "Project type" dropdown
-- Services page CTA button: "Book a Consultation" → "Get in Touch"
-- About page Core Skills + Software merged into one section (was two separate headings)
+**Migrated everything off the developer's personal accounts onto Pelmot's own** (this was the bulk of the session — see CLAUDE.md's "Account ownership" section for full detail):
+- Cloudflare: new account, new custom domain `pelmot-creativity.com` (was `pelcre.myworkss.workers.dev`). Old account's Worker now just 301-redirects to the new domain, kept alive so the `pelcre` name can't be squatted.
+- Cloudflare Web Analytics: switched to automatic edge injection under the new account (old manual beacon script removed from `index.html`).
+- GitHub: repo transferred `reiw9/pelcre` → `Pelmot/pelcre`. Local remote and docs updated.
+- Sanity: project transferred out of the developer's org into a new org owned by Pelmot. **Confirmed fully separated** — the developer's Sanity MCP access no longer sees this project at all anymore, so any future Sanity work (schema, CORS, etc.) needs an account with access to Pelmot's org.
+- Fixed a real HTTPS bug found along the way: the new Workers Custom Domain wasn't forcing `http://` → `https://` (that's a dashboard-only zone setting with no API access from here), which is what triggered Instagram's "not secure connection" warning on a shared link. Fixed at the Worker level instead.
 
-**New page:**
-- `/privacy` — trilingual Privacy Policy page (contact form data, Web3Forms, Cloudflare Analytics cookie-free, localStorage, Google Maps embed). Static i18n content, not Sanity-backed. Linked from footer. Added to sitemap.
+**Fixed a recurring Sanity fetch error reported specifically inside Instagram's in-app browser:**
+- Root cause: the client fetched Sanity's API directly from the browser (cross-origin, CORS-dependent), and in-app WebViews are known to handle that unreliably.
+- Fix: added a same-origin proxy (`/api/sanity` in `src/worker.ts`, `sanityQuery()` in `src/lib/sanity.ts`) — the browser now only ever talks to `pelmot-creativity.com` itself. Confirmed fixed by the user after deploying.
 
-**UI/design (went through several rounds of user feedback):**
-- Language switcher shows text code (EN/TR/AR) instead of a globe icon
-- Decorative half-circle accents on both page edges (scroll with page, `-z-10` so never over content, crisp flat circles — landed here after iterating through blur/glow, count, and a real CSS stacking-context bug where `position:relative` without `z-index` didn't scope `-z-10` children correctly)
-- Home hero title/badge/CTA no longer sit inside the site-wide centered `container-lux` (was drifting toward screen-center on very wide monitors) — now anchored to the true left edge at a fixed padding on every screen size
-- Outline/translucent buttons (`Button` `variant="outline"`) now solid-filled with linen `#E0DFD2` + ink text, same in light/dark
-- Back-to-top button fills with an inverted color per theme (dark fill in light mode, light fill in dark mode)
+**Favicon**: replaced with the actual Pelmot Creativity logo photo, used as-is per explicit request (no cropping/recoloring — an earlier simplified SVG redesign was explicitly rejected in favor of the real asset).
 
-**Infra:**
-- Discovered (from a commit made just before this session) that build-time sitemap generation (`scripts/generate-sitemap.mjs`) was replaced by a live Cloudflare Worker (`src/worker.ts`) that generates `/sitemap.xml` on request, querying Sanity directly, edge-cached 1hr. `STATIC_ROUTES` in that file is the list of non-project pages included — **remember to add new top-level routes there.**
+**Code cleanup** (three things the user asked for after a "what else needs fixing" check-in):
+1. Removed a stale, untracked `public/sitemap.xml` (dead weight — sitemap is generated live by the Worker now).
+2. Resynced `AGENTS.md` with `CLAUDE.md` (had drifted significantly — some AI tools read `AGENTS.md` instead).
+3. Code-split routes via `React.lazy()` (624KB single bundle → small per-page chunks) and dropped the now-unused `@sanity/client` dependency. This surfaced two real regressions, both fixed and verified before shipping:
+   - `AnimatePresence`'s page-transition animation is fundamentally incompatible with a lazy route that suspends mid-transition (confirmed via DOM inspection: navigation would silently break, URL updates but content freezes forever, no console error). Removed the animation entirely as the safe fix at the time.
+   - Plain `npm run dev` has no Cloudflare Worker, so `/api/sanity` broke for local dev specifically. Fixed with a matching proxy in `vite.config.ts`'s dev server.
 
-## Decisions made, not just forgotten
+**Added the page-transition animation back**, properly this time — the instant swap from removing `AnimatePresence` felt like "teleporting" (user's word). Built a custom `useDeferredOutlet` hook in `Layout.tsx` that fades the old page out, *then* swaps content, *then* fades the new page in — without ever unmounting the animated container or relying on tracking a suspending child's mount lifecycle, so it can't hit the same failure mode. Verified thoroughly (console-logged state timing, scripted click-through of every route on production, no stuck/duplicate states).
 
-- **Cloudflare Turnstile (bot protection for contact form)**: recommended, user agreed in principle, but explicitly deferred until after a possible Cloudflare account transfer — Turnstile widgets + the verification Worker are tied to the specific Cloudflare account they're created in and don't move with an account transfer, so setting it up now would mean redoing it later. **Revisit this once the account situation is settled.**
-- **Privacy page scope**: user chose "simple" over "thorough/GDPR-KVKK formal compliance" — this is boilerplate, not legal advice. If the client base or requirements get more specific, revisit properly.
-- **Translation quality**: all TR/AR content is AI-translated (by Claude, one pass, first draft). User was informed a native-speaker review is optional, not automated further — no action taken, their call whenever.
+## Current live state
 
-## In progress when this session ended (interrupted, not finished)
+- Site: https://pelmot-creativity.com — fully on Pelmot's Cloudflare account, HTTPS-enforced, custom domain + `www` both working.
+- GitHub: https://github.com/Pelmot/pelcre — fully on Pelmot's account.
+- Sanity: project `cmdikf3a` — fully on Pelmot's org, developer has zero access.
+- All 3 accounts (Cloudflare, GitHub, Sanity) confirmed fully separated from the developer's personal accounts.
 
-User asked to run 4 audits: performance, full-site QA pass, search-engine-submission prep, social share preview check. Findings so far:
+## What's NOT done / owner's call
 
-1. **robots.txt + sitemap.xml**: verified correct and valid (all 6 static routes + all 12 project pages present).
+- **Turnstile** (bot protection for contact form) — was deferred pending exactly this account migration, which is now done. Ready to set up whenever wanted, not urgent.
+- **Native Turkish/Arabic translation review** — still first-pass machine translation from early in the project. Flagged from the start as needing a native speaker pass before treating as final client-facing copy.
+- **Floor plans**: 0 of 12 projects have any uploaded (as of last check — can't verify live anymore since Sanity access was transferred away).
+- **Gallery photos**: only 2 of 12 projects have them (same caveat).
+- **Real performance audit** (Core Web Vitals / LCP/INP/CLS trace) — still not possible in this environment, no Chrome DevTools MCP configured.
+- **Privacy page wording** — still mentions the Contact page's Google Maps embed, which the owner has since hidden via Studio's section-order picker. Minor, cosmetic, not fixed.
 
-2. **⚠️ Real bug found — OG/Twitter Card meta tags don't reach social crawlers.** The site is a CSR SPA; `react-helmet-async` injects per-page `<title>`/`og:title`/`og:description`/`og:image`/Twitter Card tags client-side after React hydrates. Checked the *raw* HTML response (`curl`, no JS execution) — none of those tags are present except the static `og:type`. Most social/messaging crawlers (Facebook, Twitter/X, WhatsApp, LinkedIn, Slack, Discord) do **not** execute JavaScript, so shared links almost certainly show no image and a generic/blank description regardless of which page is shared. **Needs a fix** — most likely extending the existing `src/worker.ts` (which already intercepts `/sitemap.xml` before falling through to static assets) to detect bot/crawler user agents (or just always) and inject the correct per-route meta tags server-side, possibly querying Sanity for project-specific title/image the same way the sitemap handler already does. Not yet implemented — needs a decision on approach before building it.
+## Known environment quirks encountered this session (also in CLAUDE.md)
 
-3. **Chrome DevTools MCP not configured** in this environment, so a full Core Web Vitals trace (LCP/INP/CLS per the `web-perf` skill) wasn't possible. Did a manual check instead via `curl`:
-   - TTFB ~260–280ms (good, well under the 800ms threshold)
-   - Brotli compression confirmed working
-   - **Fixable issue**: hashed JS/CSS bundle files (e.g. `index-BS3KppxK.js`) are served with `Cache-Control: public, max-age=0, must-revalidate` instead of long-lived immutable caching — wasteful since content-hashed filenames only change when content changes, so they're safe to cache forever. Fix: add a `public/_headers` file (Cloudflare Pages/Workers convention) with something like:
-     ```
-     /assets/*
-       Cache-Control: public, max-age=31536000, immutable
-     ```
-   - JS bundle ~195KB compressed (615KB raw) — on the larger side, Vite's build already warns about it. Not urgent; code-splitting by route would help if it ever becomes a real problem.
-   - CSS bundle ~9.4KB compressed — fine.
-
-4. **Full-site visual QA pass (all pages × both themes × mobile width)**: not started — got interrupted right at the first console-log check on Home.
-
-5. **Social share preview check**: partially done — the OG-tags finding above *is* this check's main result. Didn't get to verify actual rendering on a real platform (WhatsApp/Twitter card validator etc.) since the root cause (tags not server-rendered) makes that moot until fixed.
-
-### Suggested next steps for a new session
-1. Decide on and implement the OG-tag server-side injection fix (highest-impact finding)
-2. Add the `public/_headers` cache-control fix (quick, safe)
-3. Finish the visual QA pass across all pages/themes/mobile
-4. Re-run the performance audit properly if the user adds the chrome-devtools MCP server (`npx -y chrome-devtools-mcp@latest`)
-
-## Standing open items (not urgent, owner's call, unchanged from earlier in session)
-
-| Item | Notes |
-|---|---|
-| Floor Plans | 0 of 12 published projects have any — section stays hidden until added |
-| Gallery photos | Only 2 of 12 projects have them |
-| Custom domain | Still on `pelcre.myworkss.workers.dev` |
-| Native TR/AR review | Current translations are AI first-draft, functional but not native-polished |
-| Turnstile | Deferred until Cloudflare account situation is settled (see above) |
+- `wrangler login`/`gh auth login` must be run by the user in their own terminal — this environment's Bash tool is sandboxed and can't pop a real browser window.
+- Once `wrangler.jsonc` has `routes` configured, `wrangler dev` fully simulates the production hostname for routing purposes — `request.url`/`Host` header are indistinguishable from real production, so local-vs-prod detection needs an explicit env var (`IS_PRODUCTION`, via `.dev.vars`), not request inspection.
+- The Claude Code preview tool (`preview_screenshot`/`computer` screenshot action) is flaky this session too — frequently times out or shows stale state. Text/DOM-based checks (`get_page_text`, `javascript_exec`, console/network reads) were used instead and are reliable.
