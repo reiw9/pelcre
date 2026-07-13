@@ -74,7 +74,7 @@ All content (projects, bio, services, timeline, skills, software, awards, testim
 
 ## Analytics
 
-Cloudflare Web Analytics beacon script is embedded directly in `index.html` (`<script defer src="https://static.cloudflareinsights.com/beacon.min.js" ...>`). Free, cookie-free, view stats in the Cloudflare dashboard under Analytics & Logs → Web Analytics. Locally on `localhost` the beacon's own analytics POST will fail (expected/harmless — it only reports from the real deployed domain).
+Cloudflare Web Analytics is enabled via **automatic injection** at the edge (Cloudflare dashboard → new account → Analytics & Logs → Web Analytics → the site's "automatic setup" toggle, scoped to a hostname filter for `pelmot-creativity.com`/`www.pelmot-creativity.com`) rather than a manual JS snippet — since the domain's DNS is fully proxied through Cloudflare, Cloudflare injects the RUM beacon into HTML responses itself, no code involved. `index.html` used to hardcode a manual `<script data-cf-beacon>` tag with a token tied to the *old* Cloudflare account/domain; that was removed on 2026-07-13 as part of the account migration (see Cloudflare account section above) since it's both stale and redundant now. Free, cookie-free, view stats in the Cloudflare dashboard under Analytics & Logs → Web Analytics.
 
 ## Contact page map
 
